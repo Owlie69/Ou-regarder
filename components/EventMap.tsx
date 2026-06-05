@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
+import 'leaflet/dist/leaflet.css'
 import type { OuRegarderEvent, ViewingSpot } from '@/types'
 
 const rankConfig = {
@@ -41,25 +42,35 @@ export function EventMap({ event, selectedSpot, onSpotSelect }: Props) {
         zoomControl: true,
       })
 
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      // CartoDB Positron — clean minimal tiles with transit lines, then greyscaled
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+        attribution:
+          '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, ' +
+          '© <a href="https://carto.com/attributions">CARTO</a>',
+        subdomains: 'abcd',
         maxZoom: 19,
       }).addTo(map)
+
+      // Apply greyscale + slight contrast boost to the tile layer
+      const tilePane = map.getPane('tilePane')
+      if (tilePane) {
+        tilePane.style.filter = 'grayscale(1) contrast(1.15)'
+      }
 
       // Event location marker (star)
       const eventIcon = L.divIcon({
         html: `<div style="
-          width: 32px; height: 32px;
+          width: 36px; height: 36px;
           background: #0f1e3c;
-          border: 2px solid #c8a96e;
+          border: 2.5px solid #c8a96e;
           border-radius: 50%;
           display: flex; align-items: center; justify-content: center;
-          font-size: 14px;
-          box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+          font-size: 16px;
+          box-shadow: 0 2px 10px rgba(0,0,0,0.4);
         ">⭐</div>`,
         className: '',
-        iconSize: [32, 32],
-        iconAnchor: [16, 16],
+        iconSize: [36, 36],
+        iconAnchor: [18, 18],
       })
 
       L.marker([event.location.lat, event.location.lng], { icon: eventIcon })
@@ -73,19 +84,19 @@ export function EventMap({ event, selectedSpot, onSpotSelect }: Props) {
 
         const spotIcon = L.divIcon({
           html: `<div style="
-            width: ${isSelected ? 40 : 32}px;
-            height: ${isSelected ? 40 : 32}px;
+            width: ${isSelected ? 44 : 34}px;
+            height: ${isSelected ? 44 : 34}px;
             background: ${cfg.color};
             border: ${isSelected ? '3px solid #c8a96e' : '2px solid white'};
             border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
-            font-size: ${isSelected ? 18 : 14}px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            font-size: ${isSelected ? 20 : 15}px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.35);
             transition: all 0.2s;
           ">${cfg.emoji}</div>`,
           className: '',
-          iconSize: [isSelected ? 40 : 32, isSelected ? 40 : 32],
-          iconAnchor: [isSelected ? 20 : 16, isSelected ? 20 : 16],
+          iconSize: [isSelected ? 44 : 34, isSelected ? 44 : 34],
+          iconAnchor: [isSelected ? 22 : 17, isSelected ? 22 : 17],
         })
 
         const marker = L.marker([spot.lat, spot.lng], { icon: spotIcon }).addTo(map!)
@@ -128,7 +139,7 @@ export function EventMap({ event, selectedSpot, onSpotSelect }: Props) {
     <div
       ref={mapRef}
       className="w-full rounded-xl overflow-hidden"
-      style={{ height: '420px' }}
+      style={{ height: '520px' }}
     />
   )
 }

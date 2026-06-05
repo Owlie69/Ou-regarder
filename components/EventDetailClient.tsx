@@ -12,7 +12,7 @@ const EventMap = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="w-full h-[420px] rounded-xl bg-gray-100 animate-pulse flex items-center justify-center text-gray-400 text-sm">
+      <div className="w-full h-[520px] rounded-xl bg-gray-100 animate-pulse flex items-center justify-center text-gray-400 text-sm">
         Chargement de la carte…
       </div>
     ),
