@@ -76,7 +76,7 @@
       "sunAzimuthDeg": 219,
       "sunElevationDeg": 51,
       "radiusMeters": 1500,
-      "minShadowHeightMeters": 20
+      "minShadowHeightMeters": 0
     }
   },
   {

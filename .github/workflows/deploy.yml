@@ -30,6 +30,10 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Precompute visibility analysis
+        run: node scripts/precompute-visibility.mjs
+        continue-on-error: true   # don't fail the build if Paris OD / Overpass is down
+
       - name: Swap server actions for static stubs
         run: cp app/admin/actions-static.ts app/admin/actions.ts
 
