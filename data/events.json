@@ -143,7 +143,8 @@
     ],
     "seoTitle": "Meilleur endroit pour regarder le défilé du 14 juillet à Paris",
     "seoDescription": "Où se placer pour voir le défilé militaire du 14 juillet sur les Champs-Élysées ? Meilleurs spots, conseils d'arrivée et accès transport.",
-    "tags": ["14 juillet", "défilé", "Champs-Élysées", "Fête nationale", "militaire"]
+    "tags": ["14 juillet", "défilé", "Champs-Élysées", "Fête nationale", "militaire"],
+    "visibilityAnalysis": { "eventHeightMeters": 5, "radiusMeters": 1200 }
   },
   {
     "id": "feux-artifice-14-juillet",
@@ -216,7 +217,8 @@
     ],
     "seoTitle": "Où voir les feux d'artifice du 14 juillet 2026 à Paris : meilleurs endroits",
     "seoDescription": "Meilleurs spots pour regarder le feu d'artifice du 13 juillet 2026 depuis la Tour Eiffel. Trocadéro, Champ de Mars, bords de Seine : guide complet.",
-    "tags": ["14 juillet", "feux d'artifice", "Tour Eiffel", "Fête nationale", "Trocadéro"]
+    "tags": ["14 juillet", "feux d'artifice", "Tour Eiffel", "Fête nationale", "Trocadéro"],
+    "visibilityAnalysis": { "eventHeightMeters": 320, "radiusMeters": 2500 }
   },
   {
     "id": "france-senegal-coupe-monde-2026",

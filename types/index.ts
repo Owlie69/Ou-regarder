@@ -18,6 +18,11 @@ export interface EventLocation {
   name: string
 }
 
+export interface VisibilityAnalysis {
+  eventHeightMeters: number
+  radiusMeters?: number
+}
+
 export interface OuRegarderEvent {
   id: string
   slug: string
@@ -39,4 +44,5 @@ export interface OuRegarderEvent {
   seoDescription: string
   tags: string[]
   venueFilterPlaceholder?: boolean
+  visibilityAnalysis?: VisibilityAnalysis
 }
