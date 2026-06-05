@@ -117,12 +117,13 @@ async function loadPrecomputed(slug: string): Promise<Obstacle[] | null> {
 
 /** Fetch real LiDAR-measured building heights from Paris Open Data. */
 async function fetchParisBuildings(lat: number, lng: number, radius: number) {
-  const where = `distance(geo_point_2d,geom'POINT(${lng} ${lat})',${radius}m)`
+  // distance() takes metres as a plain number — no "m" suffix
+  const where = `distance(geo_point_2d,geom'POINT(${lng} ${lat})',${radius})`
   const url =
     'https://opendata.paris.fr/api/explore/v2.1/catalog/datasets/volumesbatisparis/exports/json' +
     `?where=${encodeURIComponent(where)}&select=hauteur%2Cgeo_shape`
 
-  const resp = await fetch(url)
+  const resp = await fetch(url, { headers: { Accept: 'application/json' } })
   if (!resp.ok) throw new Error(`Paris OD ${resp.status}`)
 
   type ParisBldg = { hauteur: number | null; geo_shape: { type: string; coordinates: number[][][] | number[][][][] } }
@@ -144,25 +145,35 @@ async function fetchParisBuildings(lat: number, lng: number, radius: number) {
 interface OverpassNode { lat: number; lon: number }
 interface OverpassElement { geometry?: OverpassNode[]; tags?: Record<string, string> }
 
+const OVERPASS_ENDPOINTS = [
+  'https://overpass-api.de/api/interpreter',
+  'https://overpass.kumi.systems/api/interpreter',
+]
+
 /** Fetch vegetation (trees, parks) from Overpass — not in Paris OD. */
 async function fetchVegetation(lat: number, lng: number, radius: number) {
   const query =
     `[out:json][timeout:30];` +
     `(way["natural"="wood"](around:${radius},${lat},${lng});` +
     `way["landuse"="forest"](around:${radius},${lat},${lng});` +
-    `way["leisure"="park"](around:${radius},${lat},${lng}););out geom;`
+    `way["leisure"="park"](around:${radius},${lat},${lng}););out body geom;`
 
-  const resp = await fetch('https://overpass-api.de/api/interpreter', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: new URLSearchParams({ data: query }).toString(),
-  })
-  if (!resp.ok) throw new Error(`Overpass ${resp.status}`)
-  const data: { elements: OverpassElement[] } = await resp.json()
-
-  return data.elements
-    .filter((el) => el.geometry && el.geometry.length >= 3)
-    .map((el) => ({ verts: el.geometry!.map((g) => [g.lat, g.lon] as [number, number]), height: 12 }))
+  let lastErr: unknown
+  for (const endpoint of OVERPASS_ENDPOINTS) {
+    try {
+      const resp = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded', Accept: 'application/json' },
+        body: new URLSearchParams({ data: query }).toString(),
+      })
+      if (!resp.ok) { lastErr = new Error(`Overpass ${resp.status}`); continue }
+      const data: { elements: OverpassElement[] } = await resp.json()
+      return data.elements
+        .filter((el) => el.geometry && el.geometry.length >= 3)
+        .map((el) => ({ verts: el.geometry!.map((g) => [g.lat, g.lon] as [number, number]), height: 12 }))
+    } catch (e) { lastErr = e }
+  }
+  throw lastErr
 }
 
 // ── Rendering ─────────────────────────────────────────────────────────────────
@@ -182,8 +193,8 @@ async function renderObstacles(
 
     if (shadow.length >= 3) {
       L.polygon(shadow, {
-        color: 'transparent', weight: 0,
-        fillColor: '#dc2626', fillOpacity: 0.18,
+        color: '#dc2626', weight: 0.5,
+        fillColor: '#dc2626', fillOpacity: 0.35,
       }).addTo(layer)
     }
   }
