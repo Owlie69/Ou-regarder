@@ -1,0 +1,407 @@
+[
+  {
+    "id": "eclipse-solaire-2026",
+    "slug": "eclipse-solaire-2026",
+    "name": "Éclipse solaire partielle 2026",
+    "shortDescription": "Une éclipse solaire partielle couvrant plus de 70% du soleil, visible depuis Paris le 12 août 2026.",
+    "longDescription": "Le 12 août 2026, Paris sera témoin d'un spectacle céleste rare : une éclipse solaire partielle d'une magnitude impressionnante. Le soleil sera couvert à plus de 70% au pic de l'éclipse, prévu vers 11h24. Les meilleurs spots sont les espaces ouverts avec une vue dégagée vers le sud-ouest. N'oubliez pas vos lunettes d'éclipse certifiées CE — regarder le soleil sans protection, même partiellement éclipsé, peut causer des lésions oculaires permanentes.",
+    "category": "bientot",
+    "published": true,
+    "date": "2026-08-12",
+    "time": "11:24",
+    "recurrence": null,
+    "imageUrl": "https://images.unsplash.com/photo-1532710093739-9470acff878f?w=800&q=80",
+    "location": {
+      "lat": 48.8566,
+      "lng": 2.3522,
+      "name": "Paris (ciel, direction sud-ouest)"
+    },
+    "viewingSpots": [
+      {
+        "id": "buttes-chaumont",
+        "name": "Parc des Buttes-Chaumont",
+        "rank": "best",
+        "lat": 48.8797,
+        "lng": 2.3827,
+        "direction": "Sud-ouest (azimut ~220°)",
+        "distance": "4,5 km du centre",
+        "notes": "Vaste espace ouvert avec une vue panoramique dégagée sur tout le ciel. Le temple de la Sibylle offre un point de vue surélevé idéal. Arrivez tôt pour trouver une bonne place."
+      },
+      {
+        "id": "sacre-coeur",
+        "name": "Parvis du Sacré-Cœur (Montmartre)",
+        "rank": "best",
+        "lat": 48.8867,
+        "lng": 2.3431,
+        "direction": "Sud-ouest (azimut ~220°)",
+        "distance": "5,5 km du centre",
+        "notes": "Le point le plus élevé de Paris offre une vue à 360° sans obstacles. Orientez-vous vers le sud-ouest. La foule sera importante — arrivez 1h avant le début."
+      },
+      {
+        "id": "parc-belleville",
+        "name": "Parc de Belleville",
+        "rank": "good",
+        "lat": 48.8688,
+        "lng": 2.3844,
+        "direction": "Sud-ouest (azimut ~220°)",
+        "distance": "3 km du centre",
+        "notes": "Vue dégagée vers le sud et l'ouest depuis les terrasses du parc. Moins fréquenté que Montmartre, bon compromis entre vue et tranquillité."
+      },
+      {
+        "id": "esplanade-defense",
+        "name": "Esplanade de la Défense",
+        "rank": "acceptable",
+        "lat": 48.8924,
+        "lng": 2.2379,
+        "direction": "Sud (azimut ~190°)",
+        "distance": "8 km à l'ouest du centre",
+        "notes": "Grand espace ouvert avec peu d'obstacles. La Grande Arche encadre le ciel vers l'est. Idéal si vous travaillez ou habitez à La Défense."
+      }
+    ],
+    "sunEvent": true,
+    "eventDateTime": "2026-08-12T11:24:00",
+    "viewingTips": [
+      "Portez obligatoirement des lunettes d'éclipse certifiées CE (norme ISO 12312-2)",
+      "Arrivez au moins 45 minutes avant le début pour trouver une bonne place",
+      "L'éclipse débute vers 10h05, atteint son maximum à 11h24, et se termine vers 12h45",
+      "Apportez de l'eau et de la crème solaire — il fera chaud en août",
+      "Évitez les endroits avec des arbres hauts qui pourraient bloquer la vue vers le sud-ouest",
+      "Un appareil photo avec filtre solaire permettra de capturer l'événement"
+    ],
+    "seoTitle": "Où regarder l'éclipse solaire 2026 depuis Paris — meilleurs spots",
+    "seoDescription": "Trouvez les meilleurs endroits pour observer l'éclipse solaire partielle du 12 août 2026 à Paris. Spots recommandés avec vue dégagée, horaires et conseils pratiques.",
+    "tags": ["éclipse", "astronomie", "soleil", "ciel", "événement rare"]
+  },
+  {
+    "id": "defile-14-juillet",
+    "slug": "defile-14-juillet",
+    "name": "Défilé du 14 Juillet",
+    "shortDescription": "Le grand défilé militaire sur les Champs-Élysées, tradition républicaine depuis 1880.",
+    "longDescription": "Chaque 14 juillet, l'avenue des Champs-Élysées se transforme en scène grandiose pour le défilé militaire le plus impressionnant d'Europe. Des régiments de la Légion étrangère aux démonstrations aériennes de la Patrouille de France, ce spectacle gratuit rassemble des centaines de milliers de spectateurs. Le défilé part de l'Arc de Triomphe et descend vers la Place de la Concorde. Les places sont gratuites mais limitées — les tribunes officielles sont attribuées par tirage au sort.",
+    "category": "bientot",
+    "published": true,
+    "date": "2026-07-14",
+    "time": "10:00",
+    "recurrence": "Chaque 14 juillet",
+    "imageUrl": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80",
+    "location": {
+      "lat": 48.8738,
+      "lng": 2.2950,
+      "name": "Avenue des Champs-Élysées, Paris"
+    },
+    "viewingSpots": [
+      {
+        "id": "arc-de-triomphe",
+        "name": "Rond-Point de l'Arc de Triomphe",
+        "rank": "best",
+        "lat": 48.8738,
+        "lng": 2.2950,
+        "direction": "Face à l'avenue (est)",
+        "distance": "Point de départ du défilé",
+        "notes": "Le meilleur endroit pour voir le départ du défilé et l'arrivée des avions. Accès restreint — arrivez avant 7h. Les tribunes officielles sont ici. Vue sur la totalité de l'avenue."
+      },
+      {
+        "id": "champs-elysees-milieu",
+        "name": "Milieu des Champs-Élysées (côté pair)",
+        "rank": "best",
+        "lat": 48.8710,
+        "lng": 2.3020,
+        "direction": "Vers l'Arc de Triomphe (ouest) puis la Concorde (est)",
+        "distance": "800 m de l'Arc de Triomphe",
+        "notes": "Position idéale pour voir défiler les troupes à pied et les blindés. Les côtés impairs (numéros 1-3-5…) sont légèrement plus dégagés. Arrivez avant 8h pour un bon emplacement sur les barrières."
+      },
+      {
+        "id": "place-concorde",
+        "name": "Place de la Concorde",
+        "rank": "good",
+        "lat": 48.8656,
+        "lng": 2.3212,
+        "direction": "Vers le nord-ouest (Champs-Élysées)",
+        "distance": "Terminus du défilé",
+        "notes": "Idéal pour voir la fin du défilé et les démonstrations aériennes au-dessus de la Seine. L'espace est plus grand, donc moins de bousculade. Accès depuis le métro Concorde."
+      },
+      {
+        "id": "trocadero-flyby",
+        "name": "Trocadéro (pour le survol aérien)",
+        "rank": "acceptable",
+        "lat": 48.8617,
+        "lng": 2.2885,
+        "direction": "Nord-est (vers les Champs-Élysées)",
+        "distance": "1,2 km des Champs-Élysées",
+        "notes": "Les avions de la Patrouille de France effectuent souvent des passages au-dessus de la Tour Eiffel et du Trocadéro. Bon spot pour voir la démonstration aérienne sans la foule des Champs."
+      }
+    ],
+    "sunEvent": false,
+    "eventDateTime": "2026-07-14T10:00:00",
+    "viewingTips": [
+      "Arrivez avant 7h30 pour obtenir une place sur les barrières le long de l'avenue",
+      "Le métro est fortement conseillé — Charles-de-Gaulle-Étoile, George V, Franklin D. Roosevelt, Champs-Élysées-Clemenceau",
+      "Apportez de l'eau et un chapeau — il fait souvent très chaud en juillet",
+      "Les tribunes officielles (gratuites) sont attribuées par tirage au sort — consultez le site de la Préfecture de Paris chaque juin",
+      "La Patrouille de France survole les Champs vers 10h15 — regardez bien vers le nord-ouest",
+      "Les poussettes et grands sacs sont déconseillés en raison des fouilles de sécurité"
+    ],
+    "seoTitle": "Meilleur endroit pour regarder le défilé du 14 juillet à Paris",
+    "seoDescription": "Où se placer pour voir le défilé militaire du 14 juillet sur les Champs-Élysées ? Meilleurs spots, conseils d'arrivée et accès transport.",
+    "tags": ["14 juillet", "défilé", "Champs-Élysées", "Fête nationale", "militaire"]
+  },
+  {
+    "id": "feux-artifice-14-juillet",
+    "slug": "feux-artifice-14-juillet",
+    "name": "Feux d'artifice du 14 Juillet",
+    "shortDescription": "Le plus grand feu d'artifice de France, tiré depuis la Tour Eiffel chaque 14 juillet à la nuit tombée.",
+    "longDescription": "Chaque 14 juillet au soir, la Tour Eiffel se transforme en bouquet de lumières géant. Le feu d'artifice, tiré depuis la structure même de la tour, est l'un des plus beaux au monde. Il commence généralement à 23h (22h en 2024) et dure environ 35 minutes. Des millions de Parisiens et touristes se rassemblent autour du Champ de Mars, du Trocadéro et le long de la Seine pour ce spectacle unique.",
+    "category": "bientot",
+    "published": true,
+    "date": "2026-07-14",
+    "time": "23:00",
+    "recurrence": "Chaque 14 juillet au soir",
+    "imageUrl": "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=800&q=80",
+    "location": {
+      "lat": 48.8584,
+      "lng": 2.2945,
+      "name": "Tour Eiffel, Paris"
+    },
+    "viewingSpots": [
+      {
+        "id": "trocadero",
+        "name": "Trocadéro",
+        "rank": "best",
+        "lat": 48.8617,
+        "lng": 2.2885,
+        "direction": "Face à la Tour Eiffel (sud-est)",
+        "distance": "700 m de la Tour Eiffel",
+        "notes": "La vue la plus iconique : la Tour Eiffel scintille face à vous. Les bassins du Trocadéro créent un reflet magnifique. Arrivez avant 18h pour avoir une bonne place — la foule est immense."
+      },
+      {
+        "id": "champ-de-mars",
+        "name": "Champ de Mars",
+        "rank": "best",
+        "lat": 48.8551,
+        "lng": 2.2988,
+        "direction": "Face à la Tour Eiffel (nord)",
+        "distance": "300 m de la Tour Eiffel",
+        "notes": "Au pied de la Tour Eiffel, l'expérience est totalement immersive. La vue est verticale — vous regardez les feux exploser au-dessus de vous. Ambiance festive exceptionnelle mais très dense."
+      },
+      {
+        "id": "pont-bir-hakeim",
+        "name": "Pont de Bir-Hakeim",
+        "rank": "good",
+        "lat": 48.8528,
+        "lng": 2.2876,
+        "direction": "Nord-est (vers la Tour Eiffel)",
+        "distance": "900 m de la Tour Eiffel",
+        "notes": "Le pont offre un cadrage unique avec la Tour Eiffel en arrière-plan. Moins bondé que le Trocadéro. Le pont étroit devient rapidement plein — arrivez avant 19h."
+      },
+      {
+        "id": "colline-passy",
+        "name": "Colline de Passy / Rue Raynouard",
+        "rank": "good",
+        "lat": 48.8571,
+        "lng": 2.2773,
+        "direction": "Est (vers la Tour Eiffel)",
+        "distance": "1,5 km de la Tour Eiffel",
+        "notes": "Les rues en hauteur du 16e arrondissement offrent une vue plongeante sur la Tour Eiffel et le Champ de Mars. La rue Raynouard et la rue Berton sont particulièrement bien placées. Moins de monde."
+      }
+    ],
+    "sunEvent": false,
+    "eventDateTime": "2026-07-14T23:00:00",
+    "viewingTips": [
+      "Arrivez au moins 4-5 heures avant pour un spot premium au Trocadéro ou sur le Champ de Mars",
+      "Apportez un pique-nique — l'attente est longue mais l'ambiance est festive",
+      "Le Champ de Mars est partiellement accessible (zones payantes près de la scène, zones gratuites plus loin)",
+      "Les quais de la Seine offrent de bonnes vues alternatives si tout est plein",
+      "Le métro est saturé après le feu — comptez 1h à 2h pour rentrer. Préférez marcher ou prendre un vélo",
+      "Les bâtiments du quai Branly (côté sud de la Seine) bloquent la vue après 23h15 — positionnez-vous bien"
+    ],
+    "seoTitle": "Où voir les feux d'artifice du 14 juillet à Paris — meilleurs endroits",
+    "seoDescription": "Meilleurs spots pour regarder le feu d'artifice du 14 juillet depuis la Tour Eiffel. Trocadéro, Champ de Mars, bords de Seine — conseils et horaires.",
+    "tags": ["14 juillet", "feux d'artifice", "Tour Eiffel", "Fête nationale", "Trocadéro"]
+  },
+  {
+    "id": "lever-soleil-montmartre",
+    "slug": "lever-soleil-montmartre",
+    "name": "Lever de soleil depuis Montmartre",
+    "shortDescription": "L'un des plus beaux levers de soleil de Paris, avec une vue panoramique sur toute la ville depuis la butte Montmartre.",
+    "longDescription": "Le lever de soleil depuis Montmartre est une expérience intemporelle qui transforme Paris en tableau impressionniste. Depuis le parvis du Sacré-Cœur, la ville s'éveille lentement : les toits haussmanniens s'illuminent, la Tour Eiffel capte les premiers rayons dorés, et le ciel prend des teintes de rose et d'orange. En été, le soleil se lève vers le nord-est, offrant un spectacle de lumière rasante sur tout le centre de Paris. C'est un moment de calme absolu avant que la ville ne s'anime.",
+    "category": "atemporel",
+    "published": true,
+    "date": null,
+    "time": null,
+    "recurrence": "Chaque matin — horaire variable selon la saison",
+    "imageUrl": "https://images.unsplash.com/photo-1541682339992-c09ee2ea6583?w=800&q=80",
+    "location": {
+      "lat": 48.8867,
+      "lng": 2.3431,
+      "name": "Sacré-Cœur, Montmartre, Paris"
+    },
+    "viewingSpots": [
+      {
+        "id": "parvis-sacre-coeur",
+        "name": "Parvis du Sacré-Cœur",
+        "rank": "best",
+        "lat": 48.8866,
+        "lng": 2.3431,
+        "direction": "Est à nord-est (selon la saison)",
+        "distance": "Point de vue principal",
+        "notes": "Le spot incontournable : vue à 180° sur tout Paris. En été le soleil se lève au nord-est (azimut ~55°), en hiver au sud-est (~120°). Les marches sont ouvertes toute la nuit."
+      },
+      {
+        "id": "place-du-tertre",
+        "name": "Terrasse derrière la Place du Tertre",
+        "rank": "good",
+        "lat": 48.8866,
+        "lng": 2.3410,
+        "direction": "Est",
+        "distance": "100 m du Sacré-Cœur",
+        "notes": "Vue légèrement différente avec le dôme du Sacré-Cœur en premier plan. Moins connue des touristes, souvent plus calme. Accessible depuis la rue Norvins."
+      },
+      {
+        "id": "square-willette",
+        "name": "Square Willette (escaliers inférieurs)",
+        "rank": "good",
+        "lat": 48.8843,
+        "lng": 2.3432,
+        "direction": "Est-nord-est",
+        "distance": "250 m en contrebas",
+        "notes": "Vue légèrement moins élevée mais plus dégagée latéralement. Le soleil levant illumine la façade du Sacré-Cœur depuis ici — un angle photographique unique."
+      }
+    ],
+    "sunEvent": true,
+    "eventDateTime": null,
+    "viewingTips": [
+      "En juin-juillet, le soleil se lève entre 5h45 et 6h00 — arrivez 30 min avant",
+      "En décembre-janvier, le lever est vers 8h40 — plus accessible pour les lève-tard",
+      "Le funiculaire ne fonctionne pas avant 6h — montez à pied par les escaliers (durée : 5 min)",
+      "Apportez un café thermos et un pull — même en été, l'aube est fraîche en hauteur",
+      "Les vendeurs de boissons s'installent dès 5h30 en haute saison",
+      "L'application PhotoPills ou SunSurveyor indique précisément la direction du lever selon la date"
+    ],
+    "seoTitle": "Lever de soleil depuis Montmartre Paris — horaires et meilleurs spots",
+    "seoDescription": "Comment voir le lever de soleil depuis Montmartre ? Meilleurs endroits sur la butte, horaires selon la saison et conseils pratiques pour un lever réussi.",
+    "tags": ["lever de soleil", "Montmartre", "Sacré-Cœur", "panorama", "aube", "atemporel"]
+  },
+  {
+    "id": "tour-eiffel-illuminations",
+    "slug": "tour-eiffel-illuminations",
+    "name": "Illuminations de la Tour Eiffel",
+    "shortDescription": "Chaque nuit, la Tour Eiffel scintille pendant 5 minutes au début de chaque heure. Un spectacle gratuit et intemporel.",
+    "longDescription": "Depuis 2000, la Tour Eiffel se pare chaque soir de 20 000 ampoules qui scintillent pendant 5 minutes au début de chaque heure, de la nuit tombée jusqu'à 1h du matin. Ce spectacle de lumière, conçu par Pierre Bideau, est devenu l'un des symboles de Paris la nuit. La Tour Eiffel est également illuminée en dorée toute la nuit. Certains soirs spéciaux (Nouvel An, événements culturels), des shows lumineux exceptionnels sont programmés.",
+    "category": "atemporel",
+    "published": true,
+    "date": null,
+    "time": null,
+    "recurrence": "Chaque soir dès la nuit tombée, toutes les heures jusqu'à 1h du matin",
+    "imageUrl": "https://images.unsplash.com/photo-1511739001486-6bfe10ce785f?w=800&q=80",
+    "location": {
+      "lat": 48.8584,
+      "lng": 2.2945,
+      "name": "Tour Eiffel, Paris"
+    },
+    "viewingSpots": [
+      {
+        "id": "trocadero-nuit",
+        "name": "Trocadéro",
+        "rank": "best",
+        "lat": 48.8617,
+        "lng": 2.2885,
+        "direction": "Sud (vers la Tour Eiffel)",
+        "distance": "700 m",
+        "notes": "La vue classique et la plus photographiée. Les bassins du Trocadéro reflètent les illuminations pour un effet miroir saisissant. Évitez les vendeurs ambulants qui peuvent être insistants."
+      },
+      {
+        "id": "pont-iena",
+        "name": "Pont d'Iéna",
+        "rank": "best",
+        "lat": 48.8590,
+        "lng": 2.2891,
+        "direction": "Nord (Tour Eiffel) ou Sud (Trocadéro)",
+        "distance": "Au pied de la Tour Eiffel",
+        "notes": "Vue à 360° avec la Tour Eiffel au-dessus de vous. Depuis le pont, vous pouvez voir le reflet dans la Seine. Position idéale pour photographier les scintillements depuis le bas."
+      },
+      {
+        "id": "champ-de-mars-nuit",
+        "name": "Pelouse du Champ de Mars",
+        "rank": "good",
+        "lat": 48.8551,
+        "lng": 2.2988,
+        "direction": "Nord (vers la Tour Eiffel)",
+        "distance": "500 m",
+        "notes": "Ambiance romantique sur l'herbe, vue depuis le bas. Idéal pour un pique-nique nocturne. Le dégagement au nord-ouest permet de voir les scintillements sans obstruction."
+      },
+      {
+        "id": "quai-branly",
+        "name": "Quai Branly (rive gauche)",
+        "rank": "good",
+        "lat": 48.8606,
+        "lng": 2.3020,
+        "direction": "Ouest (vers la Tour Eiffel)",
+        "distance": "400 m",
+        "notes": "Vue latérale sur la Tour Eiffel depuis la Seine. Les arbres du quai peuvent partiellement obstruer en été. Très agréable pour une promenade nocturne."
+      }
+    ],
+    "sunEvent": false,
+    "eventDateTime": null,
+    "viewingTips": [
+      "Le spectacle de scintillement dure exactement 5 minutes au début de chaque heure",
+      "En été, la nuit tombe vers 22h — le premier show est donc vers 22h ou 23h",
+      "En hiver, le premier show peut commencer dès 18h ou 19h",
+      "La Tour Eiffel reste illuminée en doré toute la nuit jusqu'à 1h du matin",
+      "Consultez le site officiel de la Tour Eiffel pour les shows spéciaux (Nouvel An, événements)",
+      "Le droit à l'image de la Tour Eiffel illuminée est protégé — les photos commerciales nocturnes nécessitent une autorisation"
+    ],
+    "seoTitle": "Où voir les illuminations de la Tour Eiffel — meilleurs spots nocturnes",
+    "seoDescription": "Découvrez les meilleurs endroits pour regarder les illuminations et le scintillement de la Tour Eiffel. Trocadéro, Champ de Mars, Seine — guide complet.",
+    "tags": ["Tour Eiffel", "illuminations", "scintillement", "nuit", "Paris", "atemporel"]
+  },
+  {
+    "id": "marathon-paris-2025",
+    "slug": "marathon-paris-2025",
+    "name": "Marathon de Paris 2025",
+    "shortDescription": "L'édition 2025 du Marathon de Paris, traversant les plus beaux monuments de la capitale.",
+    "longDescription": "Le Marathon de Paris 2025 a réuni plus de 50 000 coureurs des quatre coins du monde sur un parcours de 42,195 km traversant les plus beaux sites de Paris — des Champs-Élysées au Bois de Vincennes, en passant par la place de la Bastille et les bords de Seine. Un événement sportif et populaire dont l'écho résonne encore dans les rues de Paris.",
+    "category": "passe",
+    "published": true,
+    "date": "2025-04-06",
+    "time": "08:45",
+    "recurrence": "Chaque année en avril",
+    "imageUrl": "https://images.unsplash.com/photo-1452573992436-6d508f200b30?w=800&q=80",
+    "location": {
+      "lat": 48.8738,
+      "lng": 2.2950,
+      "name": "Avenue des Champs-Élysées (départ), Paris"
+    },
+    "viewingSpots": [
+      {
+        "id": "champs-elysees-depart",
+        "name": "Champs-Élysées (départ/arrivée)",
+        "rank": "best",
+        "lat": 48.8698,
+        "lng": 2.3070,
+        "direction": "Le long de l'avenue",
+        "distance": "Point de départ et d'arrivée",
+        "notes": "L'ambiance au départ est électrique. Les spectateurs encouragent les coureurs depuis les trottoirs de l'avenue."
+      },
+      {
+        "id": "bastille-marathon",
+        "name": "Place de la Bastille",
+        "rank": "good",
+        "lat": 48.8533,
+        "lng": 2.3692,
+        "direction": "Le long du boulevard",
+        "distance": "13e km du parcours",
+        "notes": "Point de ravitaillement officiel avec une foule nombreuse et festive. Les coureurs passent vers 9h30-10h selon leur allure."
+      }
+    ],
+    "sunEvent": false,
+    "eventDateTime": "2025-04-06T08:45:00",
+    "viewingTips": [
+      "Pour l'édition 2026, inscrivez-vous dès septembre — les places partent très vite",
+      "Le parcours traverse Paris du nord au bois de Vincennes — choisissez votre km préféré",
+      "Arrivez tôt aux points de vue populaires comme la Bastille ou Notre-Dame"
+    ],
+    "seoTitle": "Marathon de Paris 2025 — où regarder les coureurs passer",
+    "seoDescription": "Revivez le Marathon de Paris 2025. Découvrez les meilleurs endroits pour encourager les coureurs le long du parcours parisien.",
+    "tags": ["marathon", "sport", "course", "Champs-Élysées", "Paris"]
+  }
+]
