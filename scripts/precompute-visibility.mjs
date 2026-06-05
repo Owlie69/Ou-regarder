@@ -78,13 +78,17 @@ function directionalShadow(sunAzDeg, sunElDeg, verts, bH, centerLat) {
 // ── Paris Open Data — real LiDAR heights ─────────────────────────────────────
 
 async function fetchParisBuildings(lat, lng, radius) {
-  const where = `distance(geo_point_2d,geom'POINT(${lng} ${lat})',${radius}m)`
+  // distance() takes metres as a plain number — no "m" suffix
+  const where = `distance(geo_point_2d,geom'POINT(${lng} ${lat})',${radius})`
   const url =
     'https://opendata.paris.fr/api/explore/v2.1/catalog/datasets/volumesbatisparis/exports/json' +
     `?where=${encodeURIComponent(where)}&select=hauteur%2Cgeo_shape`
 
   process.stdout.write(`  Paris OD buildings (${radius} m)… `)
-  const resp = await fetch(url, { signal: AbortSignal.timeout(60_000) })
+  const resp = await fetch(url, {
+    headers: { 'Accept': 'application/json', 'User-Agent': 'ou-regarder-precompute/1.0' },
+    signal: AbortSignal.timeout(90_000),
+  })
   if (!resp.ok) throw new Error(`Paris OD HTTP ${resp.status}`)
   const data = await resp.json()
   console.log(`${data.length} buildings`)
@@ -105,32 +109,48 @@ async function fetchParisBuildings(lat, lng, radius) {
 
 // ── Overpass — vegetation only ────────────────────────────────────────────────
 
+const OVERPASS_ENDPOINTS = [
+  'https://overpass-api.de/api/interpreter',
+  'https://overpass.kumi.systems/api/interpreter',
+  'https://maps.mail.ru/osm/tools/overpass/api/interpreter',
+]
+
 async function fetchVegetation(lat, lng, radius) {
   const query =
     `[out:json][timeout:40];` +
     `(way["natural"="wood"](around:${radius},${lat},${lng});` +
     `way["landuse"="forest"](around:${radius},${lat},${lng});` +
     `way["leisure"="park"](around:${radius},${lat},${lng}););` +
-    `out geom;`
+    `out body geom;`
 
   process.stdout.write(`  Overpass vegetation (${radius} m)… `)
-  const resp = await fetch('https://overpass-api.de/api/interpreter', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body:    new URLSearchParams({ data: query }).toString(),
-    signal:  AbortSignal.timeout(60_000),
-  })
-  if (!resp.ok) throw new Error(`Overpass HTTP ${resp.status}`)
-  const json = await resp.json()
-  console.log(`${json.elements.length} elements`)
 
-  return json.elements
-    .filter(el => el.geometry?.length >= 3)
-    .map(el => ({
-      verts:  el.geometry.map(g => r5([g.lat, g.lon])),
-      height: 12,
-      isVeg:  true,
-    }))
+  let lastErr
+  for (const endpoint of OVERPASS_ENDPOINTS) {
+    try {
+      const resp = await fetch(endpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Accept': 'application/json',
+          'User-Agent': 'ou-regarder-precompute/1.0',
+        },
+        body: new URLSearchParams({ data: query }).toString(),
+        signal: AbortSignal.timeout(60_000),
+      })
+      if (!resp.ok) { lastErr = new Error(`Overpass HTTP ${resp.status} (${endpoint})`); continue }
+      const json = await resp.json()
+      console.log(`${json.elements.length} elements`)
+      return json.elements
+        .filter(el => el.geometry?.length >= 3)
+        .map(el => ({
+          verts:  el.geometry.map(g => r5([g.lat, g.lon])),
+          height: 12,
+          isVeg:  true,
+        }))
+    } catch (e) { lastErr = e }
+  }
+  throw lastErr
 }
 
 // ── Event definitions ─────────────────────────────────────────────────────────
