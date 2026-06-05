@@ -28,17 +28,7 @@ function convexHull(pts: [number, number][]): [number, number][] {
   return [...lower.slice(0, -1), ...upper.slice(0, -1)]
 }
 
-function heightFromTags(tags: Record<string, string>): number {
-  const pf = (v?: string) => (v ? parseFloat(v) : NaN)
-  const h = pf(tags.height) || pf(tags['building:height'])
-  if (!isNaN(h) && h > 0) return h
-  const lvl = parseInt(tags['building:levels'] || tags.levels || '')
-  if (!isNaN(lvl) && lvl > 0) return lvl * 3.5
-  if (tags.natural === 'wood' || tags.landuse === 'forest') return 15
-  return 17
-}
-
-/** Radial shadow projected away from a single point source. sf = eH/(eH-bH). */
+/** Radial shadow: project footprint away from a point source. */
 function radialShadow(
   eLat: number, eLng: number, eH: number,
   verts: [number, number][], bH: number,
@@ -54,9 +44,7 @@ function radialShadow(
 
 /**
  * Route shadow: union of radial shadows from every point on the parade route.
- * A viewer is blocked from the parade only if no source point on the route
- * has a clear line of sight to them — so we take the convex hull of all
- * individual shadows (conservative, slight over-estimate).
+ * Returns the convex hull of all individual shadows.
  */
 function routeShadow(
   routePoints: { lat: number; lng: number }[],
@@ -67,16 +55,14 @@ function routeShadow(
   if (bH <= 0 || verts.length < 3 || routePoints.length === 0) return []
   const allPts: [number, number][] = [...verts]
   for (const { lat, lng } of routePoints) {
-    const s = radialShadow(lat, lng, eH, verts, bH)
-    allPts.push(...s)
+    allPts.push(...radialShadow(lat, lng, eH, verts, bH))
   }
   return convexHull(allPts)
 }
 
 /**
- * Directional shadow for a sun source at (azimuthDeg, elevationDeg).
- * Shadow direction = opposite of sun (sun at SSW → shadow extends NNE).
- * Shadow length = buildingHeight / tan(elevation).
+ * Directional shadow: project footprint along sun shadow direction.
+ * Shadow direction = azimuth + 180°. Length = bH / tan(elevation).
  */
 function directionalShadow(
   sunAzDeg: number,
@@ -121,15 +107,95 @@ function computeShadow(
   return []
 }
 
-// ── Component ─────────────────────────────────────────────────────────────────
+// ── Data fetching ─────────────────────────────────────────────────────────────
+
+interface ParisBuilding {
+  hauteur: number | null
+  geo_shape: {
+    type: string
+    coordinates: number[][][] | number[][][][]
+  }
+}
+
+/**
+ * Fetch building footprints + measured heights from Paris Open Data 3D.
+ * Uses the volumesbatisparis dataset — actual LiDAR-measured heights.
+ * GeoJSON coords are [lng, lat]; we flip to [lat, lng] for Leaflet.
+ */
+async function fetchParisBuildings(
+  lat: number,
+  lng: number,
+  radius: number,
+): Promise<Array<{ verts: [number, number][]; height: number }>> {
+  const where = `distance(geo_point_2d,geom'POINT(${lng} ${lat})',${radius}m)`
+  const url =
+    `https://opendata.paris.fr/api/explore/v2.1/catalog/datasets/volumesbatisparis/exports/json` +
+    `?where=${encodeURIComponent(where)}&select=hauteur%2Cgeo_shape`
+
+  const resp = await fetch(url)
+  if (!resp.ok) throw new Error(`Paris OD ${resp.status}`)
+  const data: ParisBuilding[] = await resp.json()
+
+  const result: Array<{ verts: [number, number][]; height: number }> = []
+
+  for (const b of data) {
+    if (!b.geo_shape) continue
+    const height = typeof b.hauteur === 'number' && b.hauteur > 0 ? b.hauteur : 17
+
+    // Handle Polygon and MultiPolygon; take outer ring of first polygon
+    let ring: number[][] | undefined
+    if (b.geo_shape.type === 'Polygon') {
+      ring = (b.geo_shape.coordinates as number[][][])[0]
+    } else if (b.geo_shape.type === 'MultiPolygon') {
+      ring = (b.geo_shape.coordinates as number[][][][])[0]?.[0]
+    }
+    if (!ring || ring.length < 3) continue
+
+    // GeoJSON is [lng, lat] → flip to [lat, lng] for Leaflet
+    const verts: [number, number][] = ring.map(([lo, la]) => [la, lo])
+    result.push({ verts, height })
+  }
+
+  return result
+}
 
 interface OverpassNode { lat: number; lon: number }
 interface OverpassElement {
   type: string
-  id: number
   geometry?: OverpassNode[]
   tags?: Record<string, string>
 }
+
+/** Fetch trees / wooded areas from Overpass (not in Paris OD dataset). */
+async function fetchVegetation(
+  lat: number,
+  lng: number,
+  radius: number,
+): Promise<Array<{ verts: [number, number][]; height: number }>> {
+  const query =
+    `[out:json][timeout:30];` +
+    `(way["natural"="wood"](around:${radius},${lat},${lng});` +
+    `way["landuse"="forest"](around:${radius},${lat},${lng});` +
+    `way["leisure"="park"](around:${radius},${lat},${lng}););` +
+    `out geom;`
+
+  const resp = await fetch('https://overpass-api.de/api/interpreter', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams({ data: query }).toString(),
+  })
+  if (!resp.ok) throw new Error(`Overpass ${resp.status}`)
+  const data: { elements: OverpassElement[] } = await resp.json()
+
+  return data.elements
+    .filter((el) => el.geometry && el.geometry.length >= 3)
+    .map((el) => ({
+      verts: el.geometry!.map((g) => [g.lat, g.lon] as [number, number]),
+      height: 12,
+    }))
+}
+
+// ── Component ─────────────────────────────────────────────────────────────────
 
 const rankConfig = {
   best:       { color: '#16a34a', label: 'Meilleur spot', emoji: '🥇' },
@@ -144,9 +210,9 @@ interface Props {
 }
 
 export function EventMap({ event, selectedSpot, onSpotSelect }: Props) {
-  const mapRef          = useRef<HTMLDivElement>(null)
-  const mapInstanceRef  = useRef<LeafletMap | null>(null)
-  const visLayerRef     = useRef<LayerGroup | null>(null)
+  const mapRef         = useRef<HTMLDivElement>(null)
+  const mapInstanceRef = useRef<LeafletMap | null>(null)
+  const visLayerRef    = useRef<LayerGroup | null>(null)
   const [analysisState, setAnalysisState] = useState<'idle' | 'loading' | 'done' | 'error'>('idle')
   const [visibilityOn,  setVisibilityOn]  = useState(true)
 
@@ -170,7 +236,6 @@ export function EventMap({ event, selectedSpot, onSpotSelect }: Props) {
         zoom: 14,
       })
 
-      // CartoDB Positron — light minimal tiles
       L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
         attribution:
           '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>, ' +
@@ -179,7 +244,7 @@ export function EventMap({ event, selectedSpot, onSpotSelect }: Props) {
         maxZoom: 19,
       }).addTo(map)
 
-      // Subtle desaturation — lighter than before
+      // Light desaturation — keeps colored overlays vivid
       const tilePane = map.getPane('tilePane')
       if (tilePane) tilePane.style.filter = 'grayscale(0.5) brightness(1.1)'
 
@@ -239,40 +304,45 @@ export function EventMap({ event, selectedSpot, onSpotSelect }: Props) {
     if (!event.visibilityAnalysis) return
     const analysis = event.visibilityAnalysis
 
-    // Wait for map to be ready
     const run = async () => {
-      // Retry up to 10 times waiting for map init
-      for (let i = 0; i < 10; i++) {
+      // Wait for the Leaflet map to initialise
+      for (let i = 0; i < 15; i++) {
         if (mapInstanceRef.current) break
         await new Promise((r) => setTimeout(r, 300))
       }
       if (!mapInstanceRef.current) return
 
       setAnalysisState('loading')
+
       try {
         const { lat, lng } = event.location
         const radius = analysis.radiusMeters ?? 2000
-        const fetchLat = analysis.type === 'route' && analysis.routePoints
-          ? analysis.routePoints[Math.floor(analysis.routePoints.length / 2)].lat
-          : lat
-        const fetchLng = analysis.type === 'route' && analysis.routePoints
-          ? analysis.routePoints[Math.floor(analysis.routePoints.length / 2)].lng
-          : lng
 
-        const query =
-          `[out:json][timeout:35];` +
-          `(way["building"](around:${radius},${fetchLat},${fetchLng});` +
-          `way["natural"="wood"](around:${radius},${fetchLat},${fetchLng});` +
-          `way["landuse"="forest"](around:${radius},${fetchLat},${fetchLng}););` +
-          `out geom;`
+        const fetchCenter =
+          analysis.type === 'route' && analysis.routePoints?.length
+            ? analysis.routePoints[Math.floor(analysis.routePoints.length / 2)]
+            : { lat, lng }
 
-        const resp = await fetch('https://overpass-api.de/api/interpreter', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          body: new URLSearchParams({ data: query }).toString(),
-        })
-        if (!resp.ok) throw new Error(`Overpass ${resp.status}`)
-        const data: { elements: OverpassElement[] } = await resp.json()
+        // Fetch buildings (real heights) + vegetation in parallel
+        const [buildings, vegetation] = await Promise.allSettled([
+          fetchParisBuildings(fetchCenter.lat, fetchCenter.lng, radius),
+          fetchVegetation(fetchCenter.lat, fetchCenter.lng, radius),
+        ])
+
+        const allObstacles: Array<{ verts: [number, number][]; height: number; isVeg: boolean }> = []
+
+        if (buildings.status === 'fulfilled') {
+          for (const b of buildings.value) {
+            allObstacles.push({ ...b, isVeg: false })
+          }
+        }
+        if (vegetation.status === 'fulfilled') {
+          for (const v of vegetation.value) {
+            allObstacles.push({ ...v, isVeg: true })
+          }
+        }
+
+        if (allObstacles.length === 0) throw new Error('No obstacle data returned')
 
         const L   = await import('leaflet')
         const map = mapInstanceRef.current
@@ -282,20 +352,17 @@ export function EventMap({ event, selectedSpot, onSpotSelect }: Props) {
         const layer = L.layerGroup().addTo(map)
         visLayerRef.current = layer
 
-        for (const el of data.elements) {
-          if (!el.geometry || el.geometry.length < 3) continue
-          const verts: [number, number][] = el.geometry.map((g) => [g.lat, g.lon])
-          const isVeg = el.tags?.natural === 'wood' || el.tags?.landuse === 'forest'
-          const bH = isVeg ? 15 : heightFromTags(el.tags ?? {})
-
+        for (const { verts, height, isVeg } of allObstacles) {
+          // Building / vegetation footprint
           L.polygon(verts, {
             color:       isVeg ? '#15803d' : '#374151',
-            weight:      0.8,
+            weight:      0.6,
             fillColor:   isVeg ? '#16a34a' : '#6b7280',
-            fillOpacity: isVeg ? 0.25 : 0.40,
+            fillOpacity: isVeg ? 0.22 : 0.38,
           }).addTo(layer)
 
-          const shadow = computeShadow(analysis, { lat: fetchLat, lng: fetchLng }, verts, bH)
+          // Shadow polygon
+          const shadow = computeShadow(analysis, fetchCenter, verts, height)
           if (shadow.length >= 3) {
             L.polygon(shadow, {
               color:       'transparent',
@@ -328,15 +395,12 @@ export function EventMap({ event, selectedSpot, onSpotSelect }: Props) {
     }
   }
 
-  const hasAnalysis = !!event.visibilityAnalysis
-
   return (
     <div>
       <div ref={mapRef} className="w-full rounded-xl overflow-hidden" style={{ height: '520px' }} />
 
-      {hasAnalysis && (
+      {event.visibilityAnalysis && (
         <div className="mt-3 flex flex-wrap items-center gap-3">
-          {/* Status / toggle */}
           {analysisState === 'loading' && (
             <span className="inline-flex items-center gap-2 text-xs text-gray-500">
               <span className="w-3 h-3 border-2 border-gray-400 border-t-transparent rounded-full animate-spin" />
@@ -345,40 +409,42 @@ export function EventMap({ event, selectedSpot, onSpotSelect }: Props) {
           )}
 
           {analysisState === 'done' && (
-            <button
-              onClick={toggleVisibility}
-              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
-                visibilityOn
-                  ? 'bg-[#0f1e3c] text-white'
-                  : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50'
-              }`}
-            >
-              {visibilityOn ? '👁 Masquer l\'analyse' : '👁 Afficher l\'analyse'}
-            </button>
+            <>
+              <button
+                onClick={toggleVisibility}
+                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+                  visibilityOn
+                    ? 'bg-[#0f1e3c] text-white'
+                    : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50'
+                }`}
+              >
+                {visibilityOn ? "👁 Masquer l'analyse" : "👁 Afficher l'analyse"}
+              </button>
+
+              {visibilityOn && (
+                <div className="flex flex-wrap gap-3 text-xs text-gray-500">
+                  <span className="flex items-center gap-1.5">
+                    <span className="w-3 h-2.5 rounded-sm bg-red-600 opacity-60 inline-block" />
+                    Vue bloquée
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <span className="w-3 h-2.5 rounded-sm bg-gray-500 opacity-80 inline-block" />
+                    Bâtiment
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <span className="w-3 h-2.5 rounded-sm bg-green-600 opacity-60 inline-block" />
+                    Végétation
+                  </span>
+                  <span className="text-gray-400">· zones claires = vue dégagée</span>
+                </div>
+              )}
+            </>
           )}
 
           {analysisState === 'error' && (
             <span className="text-xs text-red-400">
-              Analyse indisponible (réseau)
+              Données indisponibles — vérifiez votre connexion
             </span>
-          )}
-
-          {/* Legend */}
-          {analysisState === 'done' && visibilityOn && (
-            <div className="flex flex-wrap gap-3 text-xs text-gray-500">
-              <span className="flex items-center gap-1.5">
-                <span className="w-3 h-2.5 rounded-sm bg-red-600 opacity-60 inline-block" />
-                Vue bloquée
-              </span>
-              <span className="flex items-center gap-1.5">
-                <span className="w-3 h-2.5 rounded-sm bg-gray-500 opacity-80 inline-block" />
-                Bâtiment
-              </span>
-              <span className="flex items-center gap-1.5">
-                <span className="w-3 h-2.5 rounded-sm bg-green-600 opacity-60 inline-block" />
-                Végétation
-              </span>
-            </div>
           )}
         </div>
       )}
