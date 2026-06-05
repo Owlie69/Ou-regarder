@@ -4,6 +4,16 @@ import { EventForm } from '@/components/EventForm'
 import { createEventAction } from '@/app/admin/actions'
 
 export default function NewEventPage() {
+  if (process.env.STATIC_EXPORT === 'true') {
+    return (
+      <div className="text-center py-16 text-gray-400">
+        <p className="text-3xl mb-3">🛠️</p>
+        <p className="font-medium">Admin CRUD unavailable on static deployment</p>
+        <p className="text-sm mt-1">Run the app locally to create or edit events.</p>
+      </div>
+    )
+  }
+
   return (
     <div>
       <Link

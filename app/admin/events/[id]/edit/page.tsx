@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, ExternalLink } from 'lucide-react'
-import { getEventBySlug, getAllEvents } from '@/lib/events'
+import { getAllEvents } from '@/lib/events'
 import { EventForm } from '@/components/EventForm'
 import { updateEventAction } from '@/app/admin/actions'
 
@@ -9,10 +9,25 @@ interface Props {
   params: { id: string }
 }
 
+export async function generateStaticParams() {
+  const events = getAllEvents()
+  return events.map((e) => ({ id: e.id }))
+}
+
 export default function EditEventPage({ params }: Props) {
   const events = getAllEvents()
   const event = events.find((e) => e.id === params.id)
   if (!event) notFound()
+
+  if (process.env.STATIC_EXPORT === 'true') {
+    return (
+      <div className="text-center py-16 text-gray-400">
+        <p className="text-3xl mb-3">🛠️</p>
+        <p className="font-medium">Admin CRUD unavailable on static deployment</p>
+        <p className="text-sm mt-1">Run the app locally to create or edit events.</p>
+      </div>
+    )
+  }
 
   const boundAction = updateEventAction.bind(null, event.id)
 
