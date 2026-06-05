@@ -38,7 +38,7 @@ export default function HomePage() {
             Trouvez le meilleur endroit pour chaque événement à Paris
           </h1>
           <p className="text-gray-300 text-lg max-w-xl leading-relaxed">
-            Éclipses, feux d'artifice, défilés, levers de soleil — nous analysons la géographie,
+            Éclipses, feux d'artifice, défilés, levers de soleil : nous analysons la géographie,
             les hauteurs et la position du soleil pour vous recommander les meilleurs spots.
           </p>
         </div>

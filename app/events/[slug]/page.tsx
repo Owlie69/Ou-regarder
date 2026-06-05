@@ -128,7 +128,7 @@ export default function EventPage({ params }: { params: { slug: string } }) {
         </div>
       </header>
 
-      <main className="max-w-6xl mx-auto px-4 py-8">
+      <main className="max-w-2xl mx-auto px-4 py-8">
         {/* Back */}
         <Link
           href="/"
@@ -138,82 +138,75 @@ export default function EventPage({ params }: { params: { slug: string } }) {
           Retour aux événements
         </Link>
 
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
-          {/* Left column — details */}
-          <div className="lg:col-span-2">
-            {/* Hero image */}
-            <div className="relative h-64 rounded-2xl overflow-hidden mb-6">
-              <Image
-                src={event.imageUrl}
-                alt={event.name}
-                fill
-                className="object-cover"
-                sizes="(max-width: 1024px) 100vw, 40vw"
-                unoptimized
-                priority
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-              <span
-                className={`absolute top-4 left-4 text-xs font-semibold px-3 py-1 rounded-full ${categoryClass[event.category]}`}
-              >
-                {categoryLabel[event.category]}
-              </span>
-            </div>
-
-            {/* Title & meta */}
-            <h1 className="text-2xl font-bold text-[#1a1a2e] mb-3 leading-tight">
-              {event.name}
-            </h1>
-
-            <div className="flex flex-wrap gap-3 mb-4 text-sm text-gray-600">
-              {event.date && (
-                <span className="flex items-center gap-1.5">
-                  <Calendar size={14} className="text-[#c8a96e]" />
-                  {formatDate(event.date)}
-                </span>
-              )}
-              {event.time && (
-                <span className="flex items-center gap-1.5">
-                  <Clock size={14} className="text-[#c8a96e]" />
-                  {event.time}
-                </span>
-              )}
-              {event.recurrence && (
-                <span className="flex items-center gap-1.5">
-                  <Repeat size={14} className="text-[#c8a96e]" />
-                  {event.recurrence}
-                </span>
-              )}
-              <span className="flex items-center gap-1.5">
-                <MapPin size={14} className="text-[#c8a96e]" />
-                {event.location.name}
-              </span>
-            </div>
-
-            <p className="text-gray-700 leading-relaxed text-sm mb-4">
-              {event.longDescription}
-            </p>
-
-            {/* Tags */}
-            {event.tags.length > 0 && (
-              <div className="flex flex-wrap gap-2">
-                {event.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="text-xs bg-gray-100 text-gray-600 px-2.5 py-1 rounded-full"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* Right column — interactive */}
-          <div className="lg:col-span-3">
-            <EventDetailClient event={event} />
-          </div>
+        {/* Hero image */}
+        <div className="relative h-56 sm:h-72 rounded-2xl overflow-hidden mb-6">
+          <Image
+            src={event.imageUrl}
+            alt={event.name}
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, 672px"
+            unoptimized
+            priority
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+          <span
+            className={`absolute top-4 left-4 text-xs font-semibold px-3 py-1 rounded-full ${categoryClass[event.category]}`}
+          >
+            {categoryLabel[event.category]}
+          </span>
         </div>
+
+        {/* Title & meta */}
+        <h1 className="text-2xl sm:text-3xl font-bold text-[#1a1a2e] mb-3 leading-tight">
+          {event.name}
+        </h1>
+
+        <div className="flex flex-wrap gap-3 mb-4 text-sm text-gray-600">
+          {event.date && (
+            <span className="flex items-center gap-1.5">
+              <Calendar size={14} className="text-[#c8a96e]" />
+              {formatDate(event.date)}
+            </span>
+          )}
+          {event.time && (
+            <span className="flex items-center gap-1.5">
+              <Clock size={14} className="text-[#c8a96e]" />
+              {event.time}
+            </span>
+          )}
+          {event.recurrence && (
+            <span className="flex items-center gap-1.5">
+              <Repeat size={14} className="text-[#c8a96e]" />
+              {event.recurrence}
+            </span>
+          )}
+          <span className="flex items-center gap-1.5">
+            <MapPin size={14} className="text-[#c8a96e]" />
+            {event.location.name}
+          </span>
+        </div>
+
+        <p className="text-gray-700 leading-relaxed text-sm mb-4">
+          {event.longDescription}
+        </p>
+
+        {/* Tags */}
+        {event.tags.length > 0 && (
+          <div className="flex flex-wrap gap-2 mb-8">
+            {event.tags.map((tag) => (
+              <span
+                key={tag}
+                className="text-xs bg-gray-100 text-gray-600 px-2.5 py-1 rounded-full"
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
+        )}
+
+        {/* Interactive section — map, spots, sun, tips */}
+        <EventDetailClient event={event} />
       </main>
 
       {/* Footer */}
@@ -223,8 +216,9 @@ export default function EventPage({ params }: { params: { slug: string } }) {
             <Telescope size={16} className="text-[#c8a96e]" />
             <span>Où Regarder Paris © {new Date().getFullYear()}</span>
           </div>
-          <Link href="/" className="hover:text-gray-700 transition-colors">
-            ← Retour à l'accueil
+          <Link href="/" className="inline-flex items-center gap-1.5 hover:text-gray-700 transition-colors">
+            <ArrowLeft size={14} />
+            Retour à l'accueil
           </Link>
         </div>
       </footer>

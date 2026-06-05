@@ -106,8 +106,8 @@ export function EventDetailClient({ event }: Props) {
                 </div>
                 <p className="text-sm text-gray-600 leading-relaxed pl-4">{spot.notes}</p>
                 <div className="flex gap-4 mt-2 pl-4 text-xs text-gray-400">
-                  <span>↗ {spot.direction}</span>
-                  <span>· {spot.distance}</span>
+                  <span>{spot.direction}</span>
+                  <span>{spot.distance}</span>
                 </div>
               </button>
             )
@@ -169,7 +169,7 @@ export function EventDetailClient({ event }: Props) {
           <ul className="space-y-2">
             {event.viewingTips.map((tip, i) => (
               <li key={i} className="flex items-start gap-3 text-sm text-gray-700">
-                <span className="text-[#c8a96e] font-bold mt-0.5 shrink-0">→</span>
+                <span className="text-[#c8a96e] font-bold mt-0.5 shrink-0">•</span>
                 {tip}
               </li>
             ))}

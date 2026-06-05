@@ -103,7 +103,7 @@ export function EventMap({ event, selectedSpot, onSpotSelect }: Props) {
               ">${cfg.label}</span>
             </div>
             <p style="font-size: 12px; color: #666; margin: 6px 0;">${spot.notes}</p>
-            <p style="font-size: 11px; color: #888;">↗ ${spot.direction} · ${spot.distance}</p>
+            <p style="font-size: 11px; color: #888;">${spot.direction} · ${spot.distance}</p>
           </div>
         `)
 

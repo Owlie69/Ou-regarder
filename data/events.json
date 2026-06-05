@@ -4,7 +4,7 @@
     "slug": "eclipse-solaire-2026",
     "name": "Éclipse solaire partielle 2026",
     "shortDescription": "Une éclipse solaire partielle couvrant plus de 70% du soleil, visible depuis Paris le 12 août 2026.",
-    "longDescription": "Le 12 août 2026, Paris sera témoin d'un spectacle céleste rare : une éclipse solaire partielle d'une magnitude impressionnante. Le soleil sera couvert à plus de 70% au pic de l'éclipse, prévu vers 11h24. Les meilleurs spots sont les espaces ouverts avec une vue dégagée vers le sud-ouest. N'oubliez pas vos lunettes d'éclipse certifiées CE — regarder le soleil sans protection, même partiellement éclipsé, peut causer des lésions oculaires permanentes.",
+    "longDescription": "Le 12 août 2026, Paris sera témoin d'un spectacle céleste rare : une éclipse solaire partielle d'une magnitude impressionnante. Le soleil sera couvert à plus de 70% au pic de l'éclipse, prévu vers 11h24. Les meilleurs spots sont les espaces ouverts avec une vue dégagée vers le sud-ouest. N'oubliez pas vos lunettes d'éclipse certifiées CE car regarder le soleil sans protection, même partiellement éclipsé, peut causer des lésions oculaires permanentes.",
     "category": "bientot",
     "published": true,
     "date": "2026-08-12",
@@ -23,7 +23,7 @@
         "rank": "best",
         "lat": 48.8797,
         "lng": 2.3827,
-        "direction": "Sud-ouest (azimut ~220°)",
+        "direction": "Sud-ouest (azimut 220°)",
         "distance": "4,5 km du centre",
         "notes": "Vaste espace ouvert avec une vue panoramique dégagée sur tout le ciel. Le temple de la Sibylle offre un point de vue surélevé idéal. Arrivez tôt pour trouver une bonne place."
       },
@@ -33,9 +33,9 @@
         "rank": "best",
         "lat": 48.8867,
         "lng": 2.3431,
-        "direction": "Sud-ouest (azimut ~220°)",
+        "direction": "Sud-ouest (azimut 220°)",
         "distance": "5,5 km du centre",
-        "notes": "Le point le plus élevé de Paris offre une vue à 360° sans obstacles. Orientez-vous vers le sud-ouest. La foule sera importante — arrivez 1h avant le début."
+        "notes": "Le point le plus élevé de Paris offre une vue à 360° sans obstacles. Orientez-vous vers le sud-ouest. La foule sera importante : arrivez 1h avant le début."
       },
       {
         "id": "parc-belleville",
@@ -43,7 +43,7 @@
         "rank": "good",
         "lat": 48.8688,
         "lng": 2.3844,
-        "direction": "Sud-ouest (azimut ~220°)",
+        "direction": "Sud-ouest (azimut 220°)",
         "distance": "3 km du centre",
         "notes": "Vue dégagée vers le sud et l'ouest depuis les terrasses du parc. Moins fréquenté que Montmartre, bon compromis entre vue et tranquillité."
       },
@@ -53,7 +53,7 @@
         "rank": "acceptable",
         "lat": 48.8924,
         "lng": 2.2379,
-        "direction": "Sud (azimut ~190°)",
+        "direction": "Sud (azimut 190°)",
         "distance": "8 km à l'ouest du centre",
         "notes": "Grand espace ouvert avec peu d'obstacles. La Grande Arche encadre le ciel vers l'est. Idéal si vous travaillez ou habitez à La Défense."
       }
@@ -64,11 +64,11 @@
       "Portez obligatoirement des lunettes d'éclipse certifiées CE (norme ISO 12312-2)",
       "Arrivez au moins 45 minutes avant le début pour trouver une bonne place",
       "L'éclipse débute vers 10h05, atteint son maximum à 11h24, et se termine vers 12h45",
-      "Apportez de l'eau et de la crème solaire — il fera chaud en août",
+      "Apportez de l'eau et de la crème solaire car il fera chaud en août",
       "Évitez les endroits avec des arbres hauts qui pourraient bloquer la vue vers le sud-ouest",
       "Un appareil photo avec filtre solaire permettra de capturer l'événement"
     ],
-    "seoTitle": "Où regarder l'éclipse solaire 2026 depuis Paris — meilleurs spots",
+    "seoTitle": "Où regarder l'éclipse solaire 2026 depuis Paris : meilleurs spots",
     "seoDescription": "Trouvez les meilleurs endroits pour observer l'éclipse solaire partielle du 12 août 2026 à Paris. Spots recommandés avec vue dégagée, horaires et conseils pratiques.",
     "tags": ["éclipse", "astronomie", "soleil", "ciel", "événement rare"]
   },
@@ -77,7 +77,7 @@
     "slug": "defile-14-juillet",
     "name": "Défilé du 14 Juillet",
     "shortDescription": "Le grand défilé militaire sur les Champs-Élysées, tradition républicaine depuis 1880.",
-    "longDescription": "Chaque 14 juillet, l'avenue des Champs-Élysées se transforme en scène grandiose pour le défilé militaire le plus impressionnant d'Europe. Des régiments de la Légion étrangère aux démonstrations aériennes de la Patrouille de France, ce spectacle gratuit rassemble des centaines de milliers de spectateurs. Le défilé part de l'Arc de Triomphe et descend vers la Place de la Concorde. Les places sont gratuites mais limitées — les tribunes officielles sont attribuées par tirage au sort.",
+    "longDescription": "Chaque 14 juillet, l'avenue des Champs-Élysées se transforme en scène grandiose pour le défilé militaire le plus impressionnant d'Europe. Des régiments de la Légion étrangère aux démonstrations aériennes de la Patrouille de France, ce spectacle gratuit rassemble des centaines de milliers de spectateurs. Le défilé part de l'Arc de Triomphe et descend vers la Place de la Concorde. Les places sont gratuites mais limitées : les tribunes officielles sont attribuées par tirage au sort.",
     "category": "bientot",
     "published": true,
     "date": "2026-07-14",
@@ -98,7 +98,7 @@
         "lng": 2.2950,
         "direction": "Face à l'avenue (est)",
         "distance": "Point de départ du défilé",
-        "notes": "Le meilleur endroit pour voir le départ du défilé et l'arrivée des avions. Accès restreint — arrivez avant 7h. Les tribunes officielles sont ici. Vue sur la totalité de l'avenue."
+        "notes": "Le meilleur endroit pour voir le départ du défilé et l'arrivée des avions. Accès restreint : arrivez avant 7h. Les tribunes officielles sont ici. Vue sur la totalité de l'avenue."
       },
       {
         "id": "champs-elysees-milieu",
@@ -108,7 +108,7 @@
         "lng": 2.3020,
         "direction": "Vers l'Arc de Triomphe (ouest) puis la Concorde (est)",
         "distance": "800 m de l'Arc de Triomphe",
-        "notes": "Position idéale pour voir défiler les troupes à pied et les blindés. Les côtés impairs (numéros 1-3-5…) sont légèrement plus dégagés. Arrivez avant 8h pour un bon emplacement sur les barrières."
+        "notes": "Position idéale pour voir défiler les troupes à pied et les blindés. Les côtés impairs sont légèrement plus dégagés. Arrivez avant 8h pour un bon emplacement sur les barrières."
       },
       {
         "id": "place-concorde",
@@ -135,10 +135,10 @@
     "eventDateTime": "2026-07-14T10:00:00",
     "viewingTips": [
       "Arrivez avant 7h30 pour obtenir une place sur les barrières le long de l'avenue",
-      "Le métro est fortement conseillé — Charles-de-Gaulle-Étoile, George V, Franklin D. Roosevelt, Champs-Élysées-Clemenceau",
-      "Apportez de l'eau et un chapeau — il fait souvent très chaud en juillet",
-      "Les tribunes officielles (gratuites) sont attribuées par tirage au sort — consultez le site de la Préfecture de Paris chaque juin",
-      "La Patrouille de France survole les Champs vers 10h15 — regardez bien vers le nord-ouest",
+      "Le métro est fortement conseillé : Charles-de-Gaulle-Étoile, George V, Franklin D. Roosevelt, Champs-Élysées-Clemenceau",
+      "Apportez de l'eau et un chapeau car il fait souvent très chaud en juillet",
+      "Les tribunes officielles (gratuites) sont attribuées par tirage au sort chaque juin sur le site de la Préfecture de Paris",
+      "La Patrouille de France survole les Champs vers 10h15 : regardez bien vers le nord-ouest",
       "Les poussettes et grands sacs sont déconseillés en raison des fouilles de sécurité"
     ],
     "seoTitle": "Meilleur endroit pour regarder le défilé du 14 juillet à Paris",
@@ -149,11 +149,11 @@
     "id": "feux-artifice-14-juillet",
     "slug": "feux-artifice-14-juillet",
     "name": "Feux d'artifice du 14 Juillet",
-    "shortDescription": "Le plus grand feu d'artifice de France, tiré depuis la Tour Eiffel chaque 14 juillet à la nuit tombée.",
-    "longDescription": "Chaque 14 juillet au soir, la Tour Eiffel se transforme en bouquet de lumières géant. Le feu d'artifice, tiré depuis la structure même de la tour, est l'un des plus beaux au monde. Il commence généralement à 23h (22h en 2024) et dure environ 35 minutes. Des millions de Parisiens et touristes se rassemblent autour du Champ de Mars, du Trocadéro et le long de la Seine pour ce spectacle unique.",
+    "shortDescription": "En 2026, le feu d'artifice de la Tour Eiffel est avancé au 13 juillet en mémoire des victimes de Nice. Spectacle tiré depuis la Tour Eiffel à 23h.",
+    "longDescription": "En 2026, le feu d'artifice national est exceptionnellement tiré le soir du 13 juillet (et non le 14) en hommage aux victimes de l'attentat de Nice du 14 juillet 2016, dont c'est le 10e anniversaire. Le spectacle part de la Tour Eiffel à 23h et dure environ 35 minutes. Des millions de Parisiens et touristes se rassemblent autour du Champ de Mars, du Trocadéro et le long de la Seine pour ce moment unique.",
     "category": "bientot",
     "published": true,
-    "date": "2026-07-14",
+    "date": "2026-07-13",
     "time": "23:00",
     "recurrence": "Chaque 14 juillet au soir",
     "imageUrl": "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=800&q=80",
@@ -171,7 +171,7 @@
         "lng": 2.2885,
         "direction": "Face à la Tour Eiffel (sud-est)",
         "distance": "700 m de la Tour Eiffel",
-        "notes": "La vue la plus iconique : la Tour Eiffel scintille face à vous. Les bassins du Trocadéro créent un reflet magnifique. Arrivez avant 18h pour avoir une bonne place — la foule est immense."
+        "notes": "La vue la plus iconique : la Tour Eiffel scintille face à vous. Les bassins du Trocadéro créent un reflet magnifique. Arrivez avant 18h pour avoir une bonne place car la foule est immense."
       },
       {
         "id": "champ-de-mars",
@@ -181,7 +181,7 @@
         "lng": 2.2988,
         "direction": "Face à la Tour Eiffel (nord)",
         "distance": "300 m de la Tour Eiffel",
-        "notes": "Au pied de la Tour Eiffel, l'expérience est totalement immersive. La vue est verticale — vous regardez les feux exploser au-dessus de vous. Ambiance festive exceptionnelle mais très dense."
+        "notes": "Au pied de la Tour Eiffel, l'expérience est totalement immersive. La vue est verticale : vous regardez les feux exploser au-dessus de vous. Ambiance festive exceptionnelle mais très dense."
       },
       {
         "id": "pont-bir-hakeim",
@@ -191,7 +191,7 @@
         "lng": 2.2876,
         "direction": "Nord-est (vers la Tour Eiffel)",
         "distance": "900 m de la Tour Eiffel",
-        "notes": "Le pont offre un cadrage unique avec la Tour Eiffel en arrière-plan. Moins bondé que le Trocadéro. Le pont étroit devient rapidement plein — arrivez avant 19h."
+        "notes": "Le pont offre un cadrage unique avec la Tour Eiffel en arrière-plan. Moins bondé que le Trocadéro. Le pont étroit devient rapidement plein : arrivez avant 19h."
       },
       {
         "id": "colline-passy",
@@ -205,18 +205,215 @@
       }
     ],
     "sunEvent": false,
-    "eventDateTime": "2026-07-14T23:00:00",
+    "eventDateTime": "2026-07-13T23:00:00",
     "viewingTips": [
-      "Arrivez au moins 4-5 heures avant pour un spot premium au Trocadéro ou sur le Champ de Mars",
-      "Apportez un pique-nique — l'attente est longue mais l'ambiance est festive",
-      "Le Champ de Mars est partiellement accessible (zones payantes près de la scène, zones gratuites plus loin)",
-      "Les quais de la Seine offrent de bonnes vues alternatives si tout est plein",
-      "Le métro est saturé après le feu — comptez 1h à 2h pour rentrer. Préférez marcher ou prendre un vélo",
-      "Les bâtiments du quai Branly (côté sud de la Seine) bloquent la vue après 23h15 — positionnez-vous bien"
+      "Cette année le feu d'artifice est le 13 juillet (et non le 14) en hommage aux victimes de Nice 2016",
+      "Arrivez au moins 4 à 5 heures avant pour un spot premium au Trocadéro ou sur le Champ de Mars",
+      "Apportez un pique-nique car l'attente est longue mais l'ambiance est festive",
+      "Le Champ de Mars est partiellement accessible avec zones gratuites plus loin de la scène",
+      "Le métro est saturé après le feu : comptez 1h à 2h pour rentrer. Préférez marcher ou prendre un vélo",
+      "Les bâtiments du quai Branly côté sud de la Seine bloquent la vue après 23h15 : positionnez-vous bien"
     ],
-    "seoTitle": "Où voir les feux d'artifice du 14 juillet à Paris — meilleurs endroits",
-    "seoDescription": "Meilleurs spots pour regarder le feu d'artifice du 14 juillet depuis la Tour Eiffel. Trocadéro, Champ de Mars, bords de Seine — conseils et horaires.",
+    "seoTitle": "Où voir les feux d'artifice du 14 juillet 2026 à Paris : meilleurs endroits",
+    "seoDescription": "Meilleurs spots pour regarder le feu d'artifice du 13 juillet 2026 depuis la Tour Eiffel. Trocadéro, Champ de Mars, bords de Seine : guide complet.",
     "tags": ["14 juillet", "feux d'artifice", "Tour Eiffel", "Fête nationale", "Trocadéro"]
+  },
+  {
+    "id": "france-senegal-coupe-monde-2026",
+    "slug": "france-senegal-coupe-monde-2026",
+    "name": "France vs Sénégal - Coupe du Monde 2026",
+    "shortDescription": "Premier match des Bleus en phase de groupes de la Coupe du Monde, à suivre en fan zone à Paris. Coup d'envoi à 21h (heure française).",
+    "longDescription": "Les Bleus ouvrent leur Coupe du Monde 2026 face au Sénégal le 16 juin au MetLife Stadium de New York. Coup d'envoi à 21h (heure française). Plusieurs grandes fan zones à Paris permettent de vivre le match en direct sur écran géant avec des milliers de supporters : Fan Zone officielle au Parc de la Villette (Paris 19e), Club Coca-Cola au Quai de la Photo (Paris 13e), et Ground Control (Paris 12e). Le groupe de la France comprend également l'Irak et la Norvège.",
+    "category": "bientot",
+    "published": true,
+    "date": "2026-06-16",
+    "time": "21:00",
+    "recurrence": null,
+    "imageUrl": "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=800&q=80",
+    "location": {
+      "lat": 48.8941,
+      "lng": 2.3909,
+      "name": "Fan zones Paris (match au MetLife Stadium, New York)"
+    },
+    "viewingSpots": [
+      {
+        "id": "fan-zone-villette",
+        "name": "Fan Zone Officielle - Parc de la Villette (Paris 19e)",
+        "rank": "best",
+        "lat": 48.8941,
+        "lng": 2.3909,
+        "direction": "Écran géant face au public",
+        "distance": "Paris 19e - Métro Porte de Pantin",
+        "notes": "Fan zone officielle sur 1 800 m², capacité 2 000 personnes par jour. Ouverte de 12h à 21h (jusqu'à 23h pour les matchs de France). Entrée gratuite. Animations LEGO et activités sportives. La plus grande fan zone de Paris."
+      },
+      {
+        "id": "club-coca-cola-quai-photo",
+        "name": "Club Coca-Cola - Quai de la Photo (Paris 13e)",
+        "rank": "good",
+        "lat": 48.8362,
+        "lng": 2.3757,
+        "direction": "Écran géant en bord de Seine",
+        "distance": "Paris 13e - Métro Bibliothèque François Mitterrand",
+        "notes": "Ouvert dès midi, mode Coupe du Monde à partir de 16h. Entrée gratuite mais réservation fortement conseillée pour les matchs de France. Bonne ambiance sur les bords de Seine. Grand écran en plein air."
+      },
+      {
+        "id": "ground-control",
+        "name": "Ground Control (Paris 12e)",
+        "rank": "good",
+        "lat": 48.8463,
+        "lng": 2.3736,
+        "direction": "Écran géant intérieur et extérieur",
+        "distance": "Paris 12e - Métro Gare de Lyon",
+        "notes": "Bar à ciel ouvert avec grand écran. Ambiance festive, food trucks et bières. Réservation recommandée pour les matchs importants. Ouverture en journée avec programmation spéciale Coupe du Monde."
+      },
+      {
+        "id": "grand-rex",
+        "name": "Le Grand Rex (Paris 2e)",
+        "rank": "acceptable",
+        "lat": 48.8674,
+        "lng": 2.3484,
+        "direction": "Écran cinema géant",
+        "distance": "Paris 2e - Métro Bonne Nouvelle",
+        "notes": "Retransmission du match France-Sénégal sur l'écran cinéma géant du Grand Rex avec animations. Ambiance unique dans la grande salle historique. Réservation obligatoire. Places limitées."
+      }
+    ],
+    "sunEvent": false,
+    "eventDateTime": "2026-06-16T21:00:00",
+    "viewingTips": [
+      "Le match France-Sénégal est à 21h heure française (15h heure locale à New York)",
+      "Arrivez à la fan zone au moins 1h avant le coup d'envoi pour trouver une bonne place",
+      "La Fan Zone de la Villette accepte jusqu'à 2 000 personnes : réservation conseillée",
+      "Le Club Coca-Cola (Paris 13e) requiert une réservation pour les matchs de France",
+      "De nombreux bars de quartier diffusent aussi le match en terrasse",
+      "La Fête de la Musique a lieu le même soir (21 juin) : vérifiez les horaires et perturbations"
+    ],
+    "seoTitle": "Où regarder France vs Sénégal Coupe du Monde 2026 à Paris",
+    "seoDescription": "Où voir le match France-Sénégal de la Coupe du Monde 2026 à Paris ? Fan zones, écrans géants et bars qui retransmettent le match du 16 juin 2026.",
+    "tags": ["football", "Coupe du Monde 2026", "équipe de France", "fan zone", "écran géant", "Sénégal"]
+  },
+  {
+    "id": "france-irak-coupe-monde-2026",
+    "slug": "france-irak-coupe-monde-2026",
+    "name": "France vs Irak - Coupe du Monde 2026",
+    "shortDescription": "Deuxième match de la France en phase de groupes, à 23h (heure française). Fan zones ouvertes toute la soirée à Paris.",
+    "longDescription": "Les Bleus affrontent l'Irak le 22 juin au Lincoln Financial Field de Philadelphie. Coup d'envoi à 23h (heure française). Les fan zones parisiennes prolongent leurs horaires pour ce match à fort enjeu. Avec une victoire contre le Sénégal, la France peut assurer sa qualification dès ce match. Les mêmes fan zones que pour France-Sénégal sont actives : Villette, Quai de la Photo, Ground Control.",
+    "category": "bientot",
+    "published": true,
+    "date": "2026-06-22",
+    "time": "23:00",
+    "recurrence": null,
+    "imageUrl": "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=800&q=80",
+    "location": {
+      "lat": 48.8941,
+      "lng": 2.3909,
+      "name": "Fan zones Paris (match au Lincoln Financial Field, Philadelphie)"
+    },
+    "viewingSpots": [
+      {
+        "id": "fan-zone-villette-2",
+        "name": "Fan Zone Officielle - Parc de la Villette (Paris 19e)",
+        "rank": "best",
+        "lat": 48.8941,
+        "lng": 2.3909,
+        "direction": "Écran géant face au public",
+        "distance": "Paris 19e - Métro Porte de Pantin",
+        "notes": "Prolongation des horaires jusqu'à 1h du matin pour les matchs de France. Fan zone la plus grande de Paris avec 2 000 places. Entrée gratuite mais réservation conseillée."
+      },
+      {
+        "id": "club-coca-cola-quai-photo-2",
+        "name": "Club Coca-Cola - Quai de la Photo (Paris 13e)",
+        "rank": "good",
+        "lat": 48.8362,
+        "lng": 2.3757,
+        "direction": "Écran géant en bord de Seine",
+        "distance": "Paris 13e - Métro Bibliothèque François Mitterrand",
+        "notes": "Soirée spéciale Coupe du Monde à partir de 16h. Entrée gratuite, réservation obligatoire pour les matchs France. Match à 23h : prévoir de rester tard."
+      },
+      {
+        "id": "ground-control-2",
+        "name": "Ground Control (Paris 12e)",
+        "rank": "good",
+        "lat": 48.8463,
+        "lng": 2.3736,
+        "direction": "Écran géant intérieur et extérieur",
+        "distance": "Paris 12e - Métro Gare de Lyon",
+        "notes": "Match tardif à 23h. Ground Control est particulièrement adapté pour les matchs nocturnes avec son ambiance bar festive. Food trucks jusqu'à minuit."
+      }
+    ],
+    "sunEvent": false,
+    "eventDateTime": "2026-06-22T23:00:00",
+    "viewingTips": [
+      "Match tardif à 23h : prévoyez de rentrer après 1h du matin",
+      "Le dernier RER et métro partent vers 1h15, vérifiez les horaires la veille",
+      "Les fan zones prolongent leurs horaires jusqu'à 1h du matin pour les matchs de France",
+      "Apportez un coupe-vent car les soirées de juin peuvent être fraîches en extérieur",
+      "Nombreux bars de nuit diffusent le match jusqu'à la fin, une bonne alternative aux fan zones"
+    ],
+    "seoTitle": "Où regarder France vs Irak Coupe du Monde 2026 à Paris",
+    "seoDescription": "Où voir le match France-Irak de la Coupe du Monde 2026 à Paris le 22 juin à 23h ? Fan zones et écrans géants ouverts tard à Paris.",
+    "tags": ["football", "Coupe du Monde 2026", "équipe de France", "fan zone", "écran géant", "Irak"]
+  },
+  {
+    "id": "france-norvege-coupe-monde-2026",
+    "slug": "france-norvege-coupe-monde-2026",
+    "name": "France vs Norvège - Coupe du Monde 2026",
+    "shortDescription": "Dernier match de la phase de groupes des Bleus, à 21h (heure française). Un match décisif pour la première place du groupe.",
+    "longDescription": "La France termine sa phase de groupes face à la Norvège le 26 juin au Gillette Stadium de Boston. Coup d'envoi à 21h (heure française). Ce match décidera de la première place du groupe et du futur adversaire en huitièmes de finale. Les fan zones parisiennes seront une nouvelle fois en effervescence pour ce rendez-vous crucial.",
+    "category": "bientot",
+    "published": true,
+    "date": "2026-06-26",
+    "time": "21:00",
+    "recurrence": null,
+    "imageUrl": "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=800&q=80",
+    "location": {
+      "lat": 48.8941,
+      "lng": 2.3909,
+      "name": "Fan zones Paris (match au Gillette Stadium, Boston)"
+    },
+    "viewingSpots": [
+      {
+        "id": "fan-zone-villette-3",
+        "name": "Fan Zone Officielle - Parc de la Villette (Paris 19e)",
+        "rank": "best",
+        "lat": 48.8941,
+        "lng": 2.3909,
+        "direction": "Écran géant face au public",
+        "distance": "Paris 19e - Métro Porte de Pantin",
+        "notes": "Fan zone officielle : le meilleur endroit pour vivre le match en collectif avec 2 000 supporters. Animations et retransmission en direct. Entrée gratuite. Réservation conseillée pour les matchs décisifs."
+      },
+      {
+        "id": "club-coca-cola-3",
+        "name": "Club Coca-Cola - Quai de la Photo (Paris 13e)",
+        "rank": "good",
+        "lat": 48.8362,
+        "lng": 2.3757,
+        "direction": "Écran géant en bord de Seine",
+        "distance": "Paris 13e - Métro Bibliothèque François Mitterrand",
+        "notes": "Pour ce dernier match de groupe, l'ambiance sera électrique. Réservation obligatoire. Arrivez tôt pour profiter de l'ambiance d'avant-match sur les bords de Seine."
+      },
+      {
+        "id": "ground-control-3",
+        "name": "Ground Control (Paris 12e)",
+        "rank": "good",
+        "lat": 48.8463,
+        "lng": 2.3736,
+        "direction": "Écran géant intérieur et extérieur",
+        "distance": "Paris 12e - Métro Gare de Lyon",
+        "notes": "Match à 21h : idéal pour une soirée complète. Arrivez dès 19h pour dîner avant le match. Ambiance festive garantie si la France est déjà qualifiée."
+      }
+    ],
+    "sunEvent": false,
+    "eventDateTime": "2026-06-26T21:00:00",
+    "viewingTips": [
+      "Match décisif pour la première place du groupe I : ambiance garantie",
+      "Arrivez à la fan zone au moins 1h avant le coup d'envoi à 21h",
+      "Si la France est déjà qualifiée, le match peut voir des rotations dans l'équipe",
+      "Les bars de supporters autour des fan zones sont une bonne alternative si les places sont complètes",
+      "Vérifiez la météo : fin juin peut être chaud ou orageux à Paris en soirée"
+    ],
+    "seoTitle": "Où regarder France vs Norvège Coupe du Monde 2026 à Paris",
+    "seoDescription": "Où voir le match France-Norvège de la Coupe du Monde 2026 à Paris le 26 juin ? Fan zones, écrans géants et bars sportifs à Paris.",
+    "tags": ["football", "Coupe du Monde 2026", "équipe de France", "fan zone", "écran géant", "Norvège"]
   },
   {
     "id": "lever-soleil-montmartre",
@@ -228,7 +425,7 @@
     "published": true,
     "date": null,
     "time": null,
-    "recurrence": "Chaque matin — horaire variable selon la saison",
+    "recurrence": "Chaque matin, horaire variable selon la saison",
     "imageUrl": "https://images.unsplash.com/photo-1541682339992-c09ee2ea6583?w=800&q=80",
     "location": {
       "lat": 48.8867,
@@ -244,7 +441,7 @@
         "lng": 2.3431,
         "direction": "Est à nord-est (selon la saison)",
         "distance": "Point de vue principal",
-        "notes": "Le spot incontournable : vue à 180° sur tout Paris. En été le soleil se lève au nord-est (azimut ~55°), en hiver au sud-est (~120°). Les marches sont ouvertes toute la nuit."
+        "notes": "Le spot incontournable : vue à 180° sur tout Paris. En été le soleil se lève au nord-est (azimut 55°), en hiver au sud-est (azimut 120°). Les marches sont ouvertes toute la nuit."
       },
       {
         "id": "place-du-tertre",
@@ -264,20 +461,20 @@
         "lng": 2.3432,
         "direction": "Est-nord-est",
         "distance": "250 m en contrebas",
-        "notes": "Vue légèrement moins élevée mais plus dégagée latéralement. Le soleil levant illumine la façade du Sacré-Cœur depuis ici — un angle photographique unique."
+        "notes": "Vue légèrement moins élevée mais plus dégagée latéralement. Le soleil levant illumine la façade du Sacré-Cœur depuis ici : un angle photographique unique."
       }
     ],
     "sunEvent": true,
     "eventDateTime": null,
     "viewingTips": [
-      "En juin-juillet, le soleil se lève entre 5h45 et 6h00 — arrivez 30 min avant",
-      "En décembre-janvier, le lever est vers 8h40 — plus accessible pour les lève-tard",
-      "Le funiculaire ne fonctionne pas avant 6h — montez à pied par les escaliers (durée : 5 min)",
-      "Apportez un café thermos et un pull — même en été, l'aube est fraîche en hauteur",
+      "En juin-juillet, le soleil se lève entre 5h45 et 6h00 : arrivez 30 min avant",
+      "En décembre-janvier, le lever est vers 8h40 : plus accessible pour les lève-tard",
+      "Le funiculaire ne fonctionne pas avant 6h : montez à pied par les escaliers (5 minutes)",
+      "Apportez un café thermos et un pull car même en été, l'aube est fraîche en hauteur",
       "Les vendeurs de boissons s'installent dès 5h30 en haute saison",
       "L'application PhotoPills ou SunSurveyor indique précisément la direction du lever selon la date"
     ],
-    "seoTitle": "Lever de soleil depuis Montmartre Paris — horaires et meilleurs spots",
+    "seoTitle": "Lever de soleil depuis Montmartre Paris : horaires et meilleurs spots",
     "seoDescription": "Comment voir le lever de soleil depuis Montmartre ? Meilleurs endroits sur la butte, horaires selon la saison et conseils pratiques pour un lever réussi.",
     "tags": ["lever de soleil", "Montmartre", "Sacré-Cœur", "panorama", "aube", "atemporel"]
   },
@@ -307,7 +504,7 @@
         "lng": 2.2885,
         "direction": "Sud (vers la Tour Eiffel)",
         "distance": "700 m",
-        "notes": "La vue classique et la plus photographiée. Les bassins du Trocadéro reflètent les illuminations pour un effet miroir saisissant. Évitez les vendeurs ambulants qui peuvent être insistants."
+        "notes": "La vue la plus photographiée. Les bassins du Trocadéro reflètent les illuminations pour un effet miroir saisissant. Évitez les vendeurs ambulants qui peuvent être insistants."
       },
       {
         "id": "pont-iena",
@@ -344,14 +541,14 @@
     "eventDateTime": null,
     "viewingTips": [
       "Le spectacle de scintillement dure exactement 5 minutes au début de chaque heure",
-      "En été, la nuit tombe vers 22h — le premier show est donc vers 22h ou 23h",
+      "En été, la nuit tombe vers 22h : le premier show est donc vers 22h ou 23h",
       "En hiver, le premier show peut commencer dès 18h ou 19h",
       "La Tour Eiffel reste illuminée en doré toute la nuit jusqu'à 1h du matin",
       "Consultez le site officiel de la Tour Eiffel pour les shows spéciaux (Nouvel An, événements)",
-      "Le droit à l'image de la Tour Eiffel illuminée est protégé — les photos commerciales nocturnes nécessitent une autorisation"
+      "Le droit à l'image de la Tour Eiffel illuminée est protégé : les photos commerciales nocturnes nécessitent une autorisation"
     ],
-    "seoTitle": "Où voir les illuminations de la Tour Eiffel — meilleurs spots nocturnes",
-    "seoDescription": "Découvrez les meilleurs endroits pour regarder les illuminations et le scintillement de la Tour Eiffel. Trocadéro, Champ de Mars, Seine — guide complet.",
+    "seoTitle": "Où voir les illuminations de la Tour Eiffel : meilleurs spots nocturnes",
+    "seoDescription": "Découvrez les meilleurs endroits pour regarder les illuminations et le scintillement de la Tour Eiffel. Trocadéro, Champ de Mars, Seine : guide complet.",
     "tags": ["Tour Eiffel", "illuminations", "scintillement", "nuit", "Paris", "atemporel"]
   },
   {
@@ -359,7 +556,7 @@
     "slug": "marathon-paris-2025",
     "name": "Marathon de Paris 2025",
     "shortDescription": "L'édition 2025 du Marathon de Paris, traversant les plus beaux monuments de la capitale.",
-    "longDescription": "Le Marathon de Paris 2025 a réuni plus de 50 000 coureurs des quatre coins du monde sur un parcours de 42,195 km traversant les plus beaux sites de Paris — des Champs-Élysées au Bois de Vincennes, en passant par la place de la Bastille et les bords de Seine. Un événement sportif et populaire dont l'écho résonne encore dans les rues de Paris.",
+    "longDescription": "Le Marathon de Paris 2025 a réuni plus de 50 000 coureurs des quatre coins du monde sur un parcours de 42,195 km traversant les plus beaux sites de Paris. Des Champs-Élysées au Bois de Vincennes, en passant par la place de la Bastille et les bords de Seine, cet événement sportif et populaire a marqué les rues de la capitale.",
     "category": "passe",
     "published": true,
     "date": "2025-04-06",
@@ -396,11 +593,11 @@
     "sunEvent": false,
     "eventDateTime": "2025-04-06T08:45:00",
     "viewingTips": [
-      "Pour l'édition 2026, inscrivez-vous dès septembre — les places partent très vite",
-      "Le parcours traverse Paris du nord au bois de Vincennes — choisissez votre km préféré",
+      "Pour l'édition 2026, inscrivez-vous dès septembre car les places partent très vite",
+      "Le parcours traverse Paris du nord au bois de Vincennes : choisissez votre km préféré",
       "Arrivez tôt aux points de vue populaires comme la Bastille ou Notre-Dame"
     ],
-    "seoTitle": "Marathon de Paris 2025 — où regarder les coureurs passer",
+    "seoTitle": "Marathon de Paris 2025 : où regarder les coureurs passer",
     "seoDescription": "Revivez le Marathon de Paris 2025. Découvrez les meilleurs endroits pour encourager les coureurs le long du parcours parisien.",
     "tags": ["marathon", "sport", "course", "Champs-Élysées", "Paris"]
   }
