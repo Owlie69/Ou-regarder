@@ -70,7 +70,14 @@
     ],
     "seoTitle": "Où regarder l'éclipse solaire 2026 depuis Paris : meilleurs spots",
     "seoDescription": "Trouvez les meilleurs endroits pour observer l'éclipse solaire partielle du 12 août 2026 à Paris. Spots recommandés avec vue dégagée, horaires et conseils pratiques.",
-    "tags": ["éclipse", "astronomie", "soleil", "ciel", "événement rare"]
+    "tags": ["éclipse", "astronomie", "soleil", "ciel", "événement rare"],
+    "visibilityAnalysis": {
+      "type": "directional",
+      "sunAzimuthDeg": 219,
+      "sunElevationDeg": 51,
+      "radiusMeters": 1500,
+      "minShadowHeightMeters": 20
+    }
   },
   {
     "id": "defile-14-juillet",
@@ -144,7 +151,24 @@
     "seoTitle": "Meilleur endroit pour regarder le défilé du 14 juillet à Paris",
     "seoDescription": "Où se placer pour voir le défilé militaire du 14 juillet sur les Champs-Élysées ? Meilleurs spots, conseils d'arrivée et accès transport.",
     "tags": ["14 juillet", "défilé", "Champs-Élysées", "Fête nationale", "militaire"],
-    "visibilityAnalysis": { "eventHeightMeters": 5, "radiusMeters": 1200 }
+    "visibilityAnalysis": {
+      "type": "route",
+      "eventHeightMeters": 5,
+      "radiusMeters": 900,
+      "routePoints": [
+        { "lat": 48.8737, "lng": 2.2950 },
+        { "lat": 48.8729, "lng": 2.2976 },
+        { "lat": 48.8721, "lng": 2.3002 },
+        { "lat": 48.8713, "lng": 2.3028 },
+        { "lat": 48.8705, "lng": 2.3055 },
+        { "lat": 48.8697, "lng": 2.3081 },
+        { "lat": 48.8689, "lng": 2.3107 },
+        { "lat": 48.8681, "lng": 2.3133 },
+        { "lat": 48.8673, "lng": 2.3159 },
+        { "lat": 48.8665, "lng": 2.3185 },
+        { "lat": 48.8656, "lng": 2.3212 }
+      ]
+    }
   },
   {
     "id": "feux-artifice-14-juillet",
@@ -218,7 +242,11 @@
     "seoTitle": "Où voir les feux d'artifice du 14 juillet 2026 à Paris : meilleurs endroits",
     "seoDescription": "Meilleurs spots pour regarder le feu d'artifice du 13 juillet 2026 depuis la Tour Eiffel. Trocadéro, Champ de Mars, bords de Seine : guide complet.",
     "tags": ["14 juillet", "feux d'artifice", "Tour Eiffel", "Fête nationale", "Trocadéro"],
-    "visibilityAnalysis": { "eventHeightMeters": 320, "radiusMeters": 2500 }
+    "visibilityAnalysis": {
+      "type": "radial",
+      "eventHeightMeters": 320,
+      "radiusMeters": 2500
+    }
   },
   {
     "id": "france-senegal-coupe-monde-2026",

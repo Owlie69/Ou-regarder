@@ -19,8 +19,20 @@ export interface EventLocation {
 }
 
 export interface VisibilityAnalysis {
-  eventHeightMeters: number
+  /** 'radial': event at a point (fireworks). 'route': event along a path (parade). 'directional': sun-based (eclipse). */
+  type: 'radial' | 'route' | 'directional'
+  /** Height of the event above ground in metres (fireworks burst, parade floats, …). Radial + route only. */
+  eventHeightMeters?: number
+  /** Radius around fetch center to query buildings, metres. Default 2000. */
   radiusMeters?: number
+  /** Route source points for 'route' type (parade path). */
+  routePoints?: { lat: number; lng: number }[]
+  /** Sun azimuth from North in degrees, for 'directional'. */
+  sunAzimuthDeg?: number
+  /** Sun elevation above horizon in degrees, for 'directional'. */
+  sunElevationDeg?: number
+  /** Minimum building height (m) to render a shadow. Useful for 'directional' to avoid micro-shadows. */
+  minShadowHeightMeters?: number
 }
 
 export interface OuRegarderEvent {
