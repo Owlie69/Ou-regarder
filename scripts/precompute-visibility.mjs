@@ -136,7 +136,7 @@ async function overpassPost(query, label) {
 
 async function fetchOverpassBuildings(lat, lng, radius) {
   const query =
-    `[out:json][timeout:60];` +
+    `[out:json][timeout:120];` +
     `way["building"](around:${radius},${lat},${lng});` +
     `out body geom qt;`
   const elements = await overpassPost(query, `buildings fallback (${radius} m)`)
@@ -183,25 +183,38 @@ const ROUTE_CHAMPS = [
  *   2. Add visibilityAnalysis to data/events.json.
  *   3. Run this script — public/visibility/<slug>.json is generated.
  */
+/**
+ * To add a new event:
+ *   1. Add an entry here with slug, fetchCenter, radius, and compute function.
+ *   2. Add visibilityAnalysis to data/events.json.
+ *   3. Run this script — public/visibility/<slug>.json is generated.
+ *
+ * Radius guidance:
+ *   - Should cover the full area a user might zoom to on the event map.
+ *   - Larger = more complete but larger JSON file (gzipped: ~150–200 bytes/building).
+ *   - 3 000 m → ~15 000 buildings → ~2.5 MB raw → ~400 KB gzip (fine).
+ *   - 5 000 m → ~40 000 buildings → ~8 MB raw → ~1.3 MB gzip (acceptable).
+ */
 const EVENTS = [
   {
     slug:        'feux-artifice-14-juillet',
     fetchCenter: { lat: 48.8584, lng: 2.2945 },
-    radius:      2500,
+    radius:      3500,  // covers 7e, 15e, 16e, 8e, Boulogne visible areas
     compute:     (v, h) => radialShadow(48.8584, 2.2945, 320, v, h),
   },
   {
     slug:        'defile-14-juillet',
+    // Parade is 2.1 km long; 1 500 m radius from midpoint covers the full route + margins
     fetchCenter: { lat: 48.8697, lng: 2.3081 },
-    radius:      900,
+    radius:      1500,
     compute:     (v, h) => routeShadow(ROUTE_CHAMPS, 5, v, h),
   },
   {
     slug:        'eclipse-solaire-2026',
     // 12 Aug 2026, 11:24 local → sun azimuth 219°, elevation 51°
-    // 8 m building → 6.5 m shadow (covers a full sidewalk); 17 m → 13.8 m (full street width)
+    // 8 m building → 6.5 m shadow (full sidewalk); 17 m → 13.8 m (full street width)
     fetchCenter: { lat: 48.8566, lng: 2.3522 },
-    radius:      1500,
+    radius:      3000,  // covers 1–6e + parts of 7e, 13e, 14e for street-level browsing
     compute:     (v, h) => directionalShadow(219, 51, v, h, 48.8566),
   },
 ]

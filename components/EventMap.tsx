@@ -305,7 +305,6 @@ export function EventMap({ event, selectedSpot, onSpotSelect }: Props) {
     const analysis = event.visibilityAnalysis
 
     const run = async () => {
-      // Wait for map to initialise
       for (let i = 0; i < 20; i++) {
         if (mapInstanceRef.current) break
         await new Promise(r => setTimeout(r, 200))
@@ -319,105 +318,67 @@ export function EventMap({ event, selectedSpot, onSpotSelect }: Props) {
       const layer = L.layerGroup().addTo(map)
       visLayerRef.current = layer
 
-      // For radial/route: shadows project from the fixed event source (Tour Eiffel, parade midpoint…).
-      // For directional: source.lat is used only as trig correction for the longitude scale factor.
       const eventSource =
         analysis.type === 'route' && analysis.routePoints?.length
           ? analysis.routePoints[Math.floor(analysis.routePoints.length / 2)]
           : { lat: event.location.lat, lng: event.location.lng }
       const radius = analysis.radiusMeters ?? 2000
 
-      const toObstacles = (raw: RawFeature[], shadowSrc: { lat: number; lng: number }): Obstacle[] =>
-        raw.map(({ verts, height, isVeg }) => ({
-          verts,
-          shadow: computeShadow(analysis, shadowSrc, verts, height),
-          isVeg,
-          height,
-        }))
-
-      // ── Initial load: precomputed JSON → Overpass live fallback ─────────────
-      let overviewObstacles: Obstacle[] = []
-      let overviewSource: 'precomputed' | 'live' = 'live'
+      // ── Load once, keep everything in memory ────────────────────────────────
+      // No further API calls after this point. Pan/zoom just filters this dataset.
+      let allObstacles: Obstacle[] = []
+      let loadedSource: 'precomputed' | 'live' = 'live'
       setAnalysisState('loading')
 
       try {
         const precomp = await loadPrecomputed(event.slug)
         if (precomp?.length) {
-          overviewObstacles = precomp
-          overviewSource = 'precomputed'
+          allObstacles = precomp
+          loadedSource = 'precomputed'
         } else {
-          // Precomputed file missing or empty — fetch live from Overpass
           const raw = await fetchOverpass(eventSource.lat, eventSource.lng, radius)
-          overviewObstacles = toObstacles(raw, eventSource)
-          if (overviewObstacles.length === 0) throw new Error('Overpass returned 0 elements')
-          overviewSource = 'live'
+          if (raw.length === 0) throw new Error('Overpass returned 0 elements')
+          allObstacles = raw.map(({ verts, height, isVeg }) => ({
+            verts,
+            shadow: computeShadow(analysis, eventSource, verts, height),
+            isVeg,
+            height,
+          }))
+          loadedSource = 'live'
         }
-        renderObstacles(overviewObstacles, layer, L, analysis)
-        setBuildingCount(overviewObstacles.length)
-        setDataSource(overviewSource)
-        setAnalysisState('done')
       } catch (err) {
-        console.error('[EventMap] Initial load failed:', err)
+        console.error('[EventMap] Load failed:', err)
         setAnalysisState('error')
         return
       }
 
-      // ── Viewport-level refresh at zoom ≥ 15 ─────────────────────────────────
-      // Fetches only buildings visible in the current viewport, recomputing shadows
-      // from the fixed event source. Zooming out restores the overview layer.
-      let debounce: ReturnType<typeof setTimeout> | null = null
-      let lastKey = ''
-      let streetLevel = false
+      // Return the subset visible inside the current viewport (+ padding).
+      // For zoom < 15 we render everything so overview shadows are always visible.
+      const getVisible = (): Obstacle[] => {
+        if (map.getZoom() < 15) return allObstacles
+        const bounds = map.getBounds().pad(0.3)
+        return allObstacles.filter(({ verts, shadow }) =>
+          verts.some(([lat, lng])   => bounds.contains([lat, lng])) ||
+          shadow.some(([lat, lng])  => bounds.contains([lat, lng]))
+        )
+      }
 
+      const refresh = () => {
+        const obs = getVisible()
+        renderObstacles(obs, layer, L, analysis)
+        setBuildingCount(obs.length)
+        setIsStreetLevel(map.getZoom() >= 15)
+        setDataSource(loadedSource)
+        setAnalysisState('done')
+      }
+
+      refresh()
+
+      // Pan / zoom → instant re-filter from in-memory data, no API calls
+      let debounce: ReturnType<typeof setTimeout> | null = null
       map.on('zoomend moveend', () => {
         if (debounce) clearTimeout(debounce)
-        debounce = setTimeout(async () => {
-          const zoom = map.getZoom()
-
-          if (zoom < 15) {
-            if (!streetLevel) return
-            streetLevel = false
-            lastKey = ''
-            setIsStreetLevel(false)
-            renderObstacles(overviewObstacles, layer, L, analysis)
-            setBuildingCount(overviewObstacles.length)
-            setDataSource(overviewSource)
-            setAnalysisState('done')
-            return
-          }
-
-          // Radius = viewport half-diagonal + 150 m margin (covers all visible buildings)
-          const center = map.getCenter()
-          const { lat, lng } = center
-          const ne = map.getBounds().getNorthEast()
-          const latM = Math.abs(ne.lat - lat) * 111320
-          const lngM = Math.abs(ne.lng - lng) * 111320 * Math.cos(lat * Math.PI / 180)
-          const vpRadius = Math.ceil(Math.sqrt(latM * latM + lngM * lngM)) + 150
-
-          const key = `${lat.toFixed(3)},${lng.toFixed(3)},${zoom}`
-          if (key === lastKey) return
-          lastKey = key
-          streetLevel = true
-          setIsStreetLevel(true)
-          setAnalysisState('loading')
-
-          try {
-            const raw = await fetchOverpass(lat, lng, vpRadius)
-            if (!visLayerRef.current || !mapInstanceRef.current) return
-            // Directional: use viewport lat for trig correction only (sun angle is global).
-            // Radial / route: always project from the fixed event source.
-            const shadowSrc = analysis.type === 'directional' ? { lat, lng } : eventSource
-            const obs = toObstacles(raw, shadowSrc)
-            renderObstacles(obs, layer, L, analysis)
-            setBuildingCount(obs.length)
-            setDataSource('live')
-            setAnalysisState('done')
-          } catch (e) {
-            console.warn('[EventMap] Viewport refresh failed:', e)
-            // Non-fatal: existing layer stays visible, no error shown to user
-            setAnalysisState('done')
-          }
-        }, 700)
+        debounce = setTimeout(refresh, 150)
       })
     }
 
@@ -445,7 +406,7 @@ export function EventMap({ event, selectedSpot, onSpotSelect }: Props) {
           {analysisState === 'loading' && (
             <span className="inline-flex items-center gap-2 text-xs text-gray-500">
               <span className="w-3 h-3 border-2 border-gray-400 border-t-transparent rounded-full animate-spin" />
-              {isStreetLevel ? 'Chargement du détail rue…' : 'Analyse de visibilité en cours…'}
+              Chargement des bâtiments… (une seule fois, puis instantané)
             </span>
           )}
 
