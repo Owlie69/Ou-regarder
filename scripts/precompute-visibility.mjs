@@ -82,7 +82,7 @@ async function fetchParisBuildings(lat, lng, radius) {
   const where = `distance(geo_point_2d,geom'POINT(${lng} ${lat})',${radius})`
   const url =
     'https://opendata.paris.fr/api/explore/v2.1/catalog/datasets/volumesbatisparis/exports/json' +
-    `?where=${encodeURIComponent(where)}&select=hauteur%2Cgeo_shape`
+    `?where=${encodeURIComponent(where)}&select=hauteur%2Cgeo_shape&limit=100000`
 
   process.stdout.write(`  Paris OD buildings (${radius} m)… `)
   const resp = await fetch(url, {

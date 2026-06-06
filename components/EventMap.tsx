@@ -122,7 +122,7 @@ async function fetchParisBuildings(lat: number, lng: number, radius: number) {
   const where = `distance(geo_point_2d,geom'POINT(${lng} ${lat})',${radius})`
   const url =
     'https://opendata.paris.fr/api/explore/v2.1/catalog/datasets/volumesbatisparis/exports/json' +
-    `?where=${encodeURIComponent(where)}&select=hauteur%2Cgeo_shape`
+    `?where=${encodeURIComponent(where)}&select=hauteur%2Cgeo_shape&limit=100000`
 
   const resp = await fetch(url, { headers: { Accept: 'application/json' } })
   if (!resp.ok) throw new Error(`Paris OD ${resp.status}`)
@@ -416,9 +416,15 @@ export function EventMap({ event, selectedSpot, onSpotSelect }: Props) {
               return
             }
 
-            const { lat, lng } = map.getCenter()
-            // Radius shrinks as zoom increases: ~800 m at z15, ~100 m at z19
-            const vpRadius = Math.max(100, Math.round(25600 / Math.pow(2, zoom - 11)))
+            const center = map.getCenter()
+            const { lat, lng } = center
+            // Compute radius from actual viewport bounds so all visible buildings are covered
+            const bounds = map.getBounds()
+            const ne = bounds.getNorthEast()
+            const latM = Math.abs(ne.lat - lat) * 111320
+            const lngM = Math.abs(ne.lng - lng) * 111320 * Math.cos(lat * Math.PI / 180)
+            // Half-diagonal of viewport + 150 m margin so edge buildings are never missed
+            const vpRadius = Math.ceil(Math.sqrt(latM * latM + lngM * lngM)) + 150
             const key = `${lat.toFixed(3)},${lng.toFixed(3)},${zoom}`
             if (key === lastKey) return
             lastKey = key
