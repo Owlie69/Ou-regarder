@@ -93,7 +93,7 @@ function computeShadow(
 
 // ── Data fetching ─────────────────────────────────────────────────────────────
 
-interface Obstacle { verts: [number, number][]; shadow: [number, number][]; isVeg: boolean }
+interface Obstacle { verts: [number, number][]; shadow: [number, number][]; isVeg: boolean; height: number }
 
 /**
  * Try loading a precomputed visibility file from public/visibility/<slug>.json.
@@ -108,8 +108,9 @@ async function loadPrecomputed(slug: string): Promise<Obstacle[] | null> {
       : ''
     const resp = await fetch(`${base}/visibility/${slug}.json`)
     if (!resp.ok) return null
-    const raw = await resp.json() as Array<{ f: [number,number][]; s: [number,number][]; v: 0|1 }>
-    return raw.map(d => ({ verts: d.f, shadow: d.s, isVeg: d.v === 1 }))
+    const raw = await resp.json() as Array<{ f: [number,number][]; s: [number,number][]; v: 0|1; h?: number }>
+    if (raw.length === 0) return null  // empty file → trigger live fallback
+    return raw.map(d => ({ verts: d.f, shadow: d.s, isVeg: d.v === 1, height: d.h ?? 17 }))
   } catch {
     return null
   }
@@ -178,17 +179,27 @@ async function fetchVegetation(lat: number, lng: number, radius: number) {
 
 // ── Rendering ─────────────────────────────────────────────────────────────────
 
+/** Shadow opacity scales with building height relative to event height.
+ *  Short building vs tall event → faint shadow (you can see over it).
+ *  Building ≥ event height → full shadow (completely blocked). */
+function shadowOpacity(bHeight: number, analysis: VisibilityAnalysis): number {
+  if (analysis.type === 'directional') return 0.50  // binary: in shadow or not
+  const eH = analysis.eventHeightMeters ?? 10
+  return Math.max(Math.min(bHeight / eH, 1) * 0.50, 0.08)
+}
+
 async function renderObstacles(
   obstacles: Obstacle[],
   layer: LayerGroup,
   L: typeof import('leaflet'),
+  analysis: VisibilityAnalysis,
 ) {
   // Draw shadows first so building footprints always sit on top
-  for (const { shadow } of obstacles) {
+  for (const { shadow, height } of obstacles) {
     if (shadow.length >= 3) {
       L.polygon(shadow, {
         color: '#dc2626', weight: 0.5,
-        fillColor: '#dc2626', fillOpacity: 0.35,
+        fillColor: '#dc2626', fillOpacity: shadowOpacity(height, analysis),
       }).addTo(layer)
     }
   }
@@ -224,6 +235,10 @@ export function EventMap({ event, selectedSpot, onSpotSelect }: Props) {
   const [visibilityOn,  setVisibilityOn]  = useState(true)
   const [dataSource,    setDataSource]    = useState<'precomputed' | 'live' | null>(null)
   const [isStreetLevel, setIsStreetLevel] = useState(false)
+  const [buildingCount, setBuildingCount] = useState(0)
+  // EventMap is 'use client' — window is always available at render time
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+  const isDebug = typeof window !== 'undefined' && window.location.search.includes('debug=1')
 
   // ── Base map ────────────────────────────────────────────────────────────────
   useEffect(() => {
@@ -326,6 +341,8 @@ export function EventMap({ event, selectedSpot, onSpotSelect }: Props) {
       const layer = L.layerGroup().addTo(map)
       visLayerRef.current = layer
 
+      // For radial/route: shadow projects FROM the fixed event source.
+      // For directional: fetchCenter.lat only used as trig correction for longitude.
       const fetchCenter =
         analysis.type === 'route' && analysis.routePoints?.length
           ? analysis.routePoints[Math.floor(analysis.routePoints.length / 2)]
@@ -342,10 +359,10 @@ export function EventMap({ event, selectedSpot, onSpotSelect }: Props) {
         const obs: Obstacle[] = []
         if (bRes.status === 'fulfilled')
           for (const { verts, height } of bRes.value)
-            obs.push({ verts, shadow: computeShadow(analysis, fc, verts, height), isVeg: false })
+            obs.push({ verts, shadow: computeShadow(analysis, fc, verts, height), isVeg: false, height })
         if (vRes.status === 'fulfilled')
           for (const { verts, height } of vRes.value)
-            obs.push({ verts, shadow: computeShadow(analysis, fc, verts, height), isVeg: true })
+            obs.push({ verts, shadow: computeShadow(analysis, fc, verts, height), isVeg: true, height })
         return obs
       }
 
@@ -354,7 +371,7 @@ export function EventMap({ event, selectedSpot, onSpotSelect }: Props) {
       setAnalysisState('loading')
       try {
         const precomp = await loadPrecomputed(event.slug)
-        if (precomp) {
+        if (precomp?.length) {
           overviewObstacles = precomp
           setDataSource('precomputed')
         } else {
@@ -362,17 +379,19 @@ export function EventMap({ event, selectedSpot, onSpotSelect }: Props) {
           if (overviewObstacles.length === 0) throw new Error('No data from any source')
           setDataSource('live')
         }
-        await renderObstacles(overviewObstacles, layer, L)
+        await renderObstacles(overviewObstacles, layer, L, analysis)
+        setBuildingCount(overviewObstacles.length)
         setAnalysisState('done')
       } catch (err) {
         console.error('Visibility analysis:', err)
         setAnalysisState('error')
       }
 
-      // ── For directional events: reload per viewport at zoom ≥ 15 ──────────
-      // This gives true street-level shadow detail — users can pan any street
-      // and see which side the building shadows fall on at eclipse time.
-      if (analysis.type === 'directional') {
+      // ── Viewport-level live reload at zoom ≥ 15 (all event types) ──────────
+      // Buildings are fetched for the current map viewport; shadow direction is
+      // always projected from the fixed event source (for radial/route) or from
+      // sun angles (for directional) — NOT from the viewport centre.
+      {
         let timer: ReturnType<typeof setTimeout> | null = null
         let lastKey = ''
         let showingStreetLevel = false
@@ -384,20 +403,21 @@ export function EventMap({ event, selectedSpot, onSpotSelect }: Props) {
 
             if (zoom < 15) {
               if (!showingStreetLevel) return
-              // Zoomed out — restore the overview
+              // Zoomed out — restore the precomputed/overview layer
               showingStreetLevel = false
               lastKey = ''
               setIsStreetLevel(false)
               if (visLayerRef.current) {
                 visLayerRef.current.clearLayers()
-                await renderObstacles(overviewObstacles, visLayerRef.current, L)
+                await renderObstacles(overviewObstacles, visLayerRef.current, L, analysis)
+                setBuildingCount(overviewObstacles.length)
               }
               setAnalysisState('done')
               return
             }
 
             const { lat, lng } = map.getCenter()
-            // Fetch radius shrinks as zoom increases: ~800 m at z15, ~100 m at z19
+            // Radius shrinks as zoom increases: ~800 m at z15, ~100 m at z19
             const vpRadius = Math.max(100, Math.round(25600 / Math.pow(2, zoom - 11)))
             const key = `${lat.toFixed(3)},${lng.toFixed(3)},${zoom}`
             if (key === lastKey) return
@@ -409,13 +429,19 @@ export function EventMap({ event, selectedSpot, onSpotSelect }: Props) {
               const buildings = await fetchParisBuildings(lat, lng, vpRadius)
               if (!visLayerRef.current || !mapInstanceRef.current) return
               visLayerRef.current.clearLayers()
-              const fc = { lat, lng }
+
+              // Directional: viewport lat used for lon/m conversion only.
+              // Radial / route: shadow must project FROM the fixed event source.
+              const shadowFc = analysis.type === 'directional' ? { lat, lng } : fetchCenter
+
               const obs: Obstacle[] = buildings.map(({ verts, height }) => ({
                 verts,
-                shadow: computeShadow(analysis, fc, verts, height),
+                shadow: computeShadow(analysis, shadowFc, verts, height),
                 isVeg: false,
+                height,
               }))
-              await renderObstacles(obs, visLayerRef.current, L)
+              await renderObstacles(obs, visLayerRef.current, L, analysis)
+              setBuildingCount(obs.length)
               setDataSource('live')
               setIsStreetLevel(true)
               setAnalysisState('done')
@@ -479,7 +505,7 @@ export function EventMap({ event, selectedSpot, onSpotSelect }: Props) {
                 <div className="flex flex-wrap gap-3 text-xs text-gray-500">
                   <span className="flex items-center gap-1.5">
                     <span className="w-3 h-2.5 rounded-sm bg-red-600 opacity-60 inline-block" />
-                    Vue bloquée (ombre)
+                    Ombre — intensité ∝ hauteur/événement
                   </span>
                   <span className="flex items-center gap-1.5">
                     <span className="w-3 h-2.5 rounded-sm bg-gray-500 opacity-80 inline-block" />
@@ -496,6 +522,12 @@ export function EventMap({ event, selectedSpot, onSpotSelect }: Props) {
                 </div>
               )}
 
+              {visibilityOn && (
+                <div className="w-full text-[10px] text-gray-400 -mt-1">
+                  Ombre légère = bâtiment plus court que l&apos;événement (vue possible par-dessus) · Ombre dense = obstruction totale
+                </div>
+              )}
+
               {event.visibilityAnalysis?.type === 'directional' && visibilityOn && (
                 <div className="w-full mt-1 text-xs text-gray-500 flex items-center gap-1.5">
                   <span className="text-yellow-500">☀</span>
@@ -503,6 +535,12 @@ export function EventMap({ event, selectedSpot, onSpotSelect }: Props) {
                     Direction soleil : <strong>SSO (219°)</strong> à <strong>51° de hauteur</strong> — regardez vers le sud-sud-ouest. Zones rouges = bâtiment bloque le soleil.
                   </span>
                 </div>
+              )}
+
+              {isDebug && (
+                <span className="text-[10px] font-mono text-gray-400 ml-auto">
+                  [debug] {buildingCount} obstacles · {dataSource ?? '—'}{isStreetLevel ? ' · street' : ' · overview'}
+                </span>
               )}
             </>
           )}

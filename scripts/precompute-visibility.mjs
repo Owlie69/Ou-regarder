@@ -208,8 +208,8 @@ async function main() {
       if (res.status !== 'fulfilled') { console.warn('  Source failed:', res.reason?.message); continue }
       for (const { verts, height, isVeg } of res.value) {
         const shadow = ev.compute(verts, height)
-        // Compact format: f=footprint, s=shadow, v=veg flag
-        obstacles.push({ f: verts, s: shadow, v: isVeg ? 1 : 0 })
+        // Compact format: f=footprint, s=shadow, v=veg flag, h=height (metres, for opacity gradient)
+        obstacles.push({ f: verts, s: shadow, v: isVeg ? 1 : 0, h: Math.round(height) })
       }
     }
 
