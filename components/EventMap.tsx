@@ -198,7 +198,7 @@ async function renderObstacles(
   for (const { shadow, height } of obstacles) {
     if (shadow.length >= 3) {
       L.polygon(shadow, {
-        color: '#dc2626', weight: 0.5,
+        color: '#dc2626', weight: 0,
         fillColor: '#dc2626', fillOpacity: shadowOpacity(height, analysis),
       }).addTo(layer)
     }
@@ -453,7 +453,9 @@ export function EventMap({ event, selectedSpot, onSpotSelect }: Props) {
               setAnalysisState('done')
             } catch (e) {
               console.error('Viewport refresh:', e)
-              setAnalysisState('error')
+              // Keep whatever is already on the layer (overview/precomputed data) visible;
+              // only the street-level enrichment failed — not a fatal error.
+              setAnalysisState('done')
             }
           }, 700)
         })
