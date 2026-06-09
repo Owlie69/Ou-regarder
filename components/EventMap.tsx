@@ -2,112 +2,40 @@
 
 import { useEffect, useRef, useState } from 'react'
 import 'leaflet/dist/leaflet.css'
-import type { Map as LeafletMap, LayerGroup } from 'leaflet'
-import type { OuRegarderEvent, ViewingSpot, VisibilityAnalysis } from '@/types'
-
-// ── Geometry ──────────────────────────────────────────────────────────────────
-
-function convexHull(pts: [number, number][]): [number, number][] {
-  if (pts.length < 3) return pts
-  const s = [...pts].sort((a, b) => (a[0] !== b[0] ? a[0] - b[0] : a[1] - b[1]))
-  const cross = (o: [number, number], a: [number, number], b: [number, number]) =>
-    (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0])
-  const lower: [number, number][] = []
-  for (const p of s) {
-    while (lower.length >= 2 && cross(lower[lower.length - 2], lower[lower.length - 1], p) <= 0) lower.pop()
-    lower.push(p)
-  }
-  const upper: [number, number][] = []
-  for (let i = s.length - 1; i >= 0; i--) {
-    const p = s[i]
-    while (upper.length >= 2 && cross(upper[upper.length - 2], upper[upper.length - 1], p) <= 0) upper.pop()
-    upper.push(p)
-  }
-  return [...lower.slice(0, -1), ...upper.slice(0, -1)]
-}
-
-function radialShadow(
-  eLat: number, eLng: number, eH: number,
-  verts: [number, number][], bH: number,
-): [number, number][] {
-  if (bH <= 0 || verts.length < 3) return []
-  const sf = Math.min(bH >= eH ? 25 : eH / (eH - bH), 25)
-  return convexHull([
-    ...verts,
-    ...verts.map(([lat, lng]): [number, number] => [eLat + sf * (lat - eLat), eLng + sf * (lng - eLng)]),
-  ])
-}
-
-function routeShadow(
-  routePoints: { lat: number; lng: number }[], eH: number,
-  verts: [number, number][], bH: number,
-): [number, number][] {
-  if (bH <= 0 || verts.length < 3) return []
-  const all: [number, number][] = [...verts]
-  for (const { lat, lng } of routePoints) all.push(...radialShadow(lat, lng, eH, verts, bH))
-  return convexHull(all)
-}
-
-function directionalShadow(
-  sunAzDeg: number, sunElDeg: number,
-  verts: [number, number][], bH: number, centerLat: number,
-): [number, number][] {
-  if (bH <= 0 || verts.length < 3) return []
-  const azRad = ((sunAzDeg + 180) % 360) * (Math.PI / 180)
-  const len   = bH / Math.tan(sunElDeg * (Math.PI / 180))
-  const dlat  = Math.cos(azRad) / 111320
-  const dlng  = Math.sin(azRad) / (111320 * Math.cos(centerLat * Math.PI / 180))
-  return convexHull([
-    ...verts,
-    ...verts.map(([lat, lng]): [number, number] => [lat + len * dlat, lng + len * dlng]),
-  ])
-}
-
-function computeShadow(
-  analysis: VisibilityAnalysis,
-  source: { lat: number; lng: number },
-  verts: [number, number][],
-  bH: number,
-): [number, number][] {
-  if (analysis.type === 'radial')
-    return radialShadow(source.lat, source.lng, analysis.eventHeightMeters ?? 10, verts, bH)
-  if (analysis.type === 'route' && analysis.routePoints)
-    return routeShadow(analysis.routePoints, analysis.eventHeightMeters ?? 5, verts, bH)
-  if (analysis.type === 'directional') {
-    if (bH < (analysis.minShadowHeightMeters ?? 0)) return []
-    return directionalShadow(
-      analysis.sunAzimuthDeg ?? 0, analysis.sunElevationDeg ?? 45,
-      verts, bH, source.lat,
-    )
-  }
-  return []
-}
+import type { Map as LeafletMap, LayerGroup, LatLngBounds } from 'leaflet'
+import type { OuRegarderEvent, ViewingSpot } from '@/types'
+import type { MultiPolygon } from '@/lib/visibility-core'
 
 // ── Data fetching ─────────────────────────────────────────────────────────────
 
 interface RawFeature { verts: [number, number][]; height: number; isVeg: boolean }
-interface Obstacle   { verts: [number, number][]; shadow: [number, number][]; isVeg: boolean; height: number }
+interface Building   { verts: [number, number][]; isVeg: boolean }
+interface Scene      { zone: MultiPolygon; buildings: Building[] }
 
 function extractHeight(tags: Record<string, string>): number {
   if (tags.height) { const h = parseFloat(tags.height); if (h > 0) return h }
   if (tags['building:levels']) { const f = parseInt(tags['building:levels']); if (f > 0) return Math.round(f * 3.5) }
-  return 17  // Haussmann baseline (5–6 floors)
+  return 17 // Haussmann baseline
 }
 
 /**
- * Try loading a precomputed visibility file written by scripts/precompute-visibility.mjs.
- * Returns null if the file is missing, empty, or malformed — live fetch takes over.
+ * Load a precomputed visibility file: { z: MultiPolygon, b: [{f, v}] }.
+ * Returns null if missing / empty / legacy-format so the live path takes over.
  */
-async function loadPrecomputed(slug: string): Promise<Obstacle[] | null> {
+async function loadPrecomputed(slug: string): Promise<Scene | null> {
   try {
     const base = typeof window !== 'undefined'
       ? window.location.pathname.split('/events/')[0].replace(/\/$/, '')
       : ''
     const resp = await fetch(`${base}/visibility/${slug}.json`)
     if (!resp.ok) return null
-    const raw = await resp.json() as Array<{ f: [number,number][]; s: [number,number][]; v: 0|1; h?: number }>
-    if (!Array.isArray(raw) || raw.length === 0) return null
-    return raw.map(d => ({ verts: d.f, shadow: d.s, isVeg: d.v === 1, height: d.h ?? 17 }))
+    const raw = await resp.json() as { z?: MultiPolygon; b?: Array<{ f: [number,number][]; v: 0|1 }> }
+    if (!raw || !Array.isArray(raw.z) || !Array.isArray(raw.b)) return null
+    if (raw.z.length === 0 && raw.b.length === 0) return null
+    return {
+      zone: raw.z,
+      buildings: raw.b.map(d => ({ verts: d.f, isVeg: d.v === 1 })),
+    }
   } catch { return null }
 }
 
@@ -120,11 +48,7 @@ const OVERPASS_ENDPOINTS = [
 interface OverpassNode    { lat: number; lon: number }
 interface OverpassElement { geometry?: OverpassNode[]; tags?: Record<string, string> }
 
-/**
- * Single Overpass query: buildings + vegetation in one request.
- * Buildings use OSM height/building:levels tags; fall back to 17 m Haussmann default.
- * Works from any browser (Overpass has CORS *, 3-endpoint failover for reliability).
- */
+/** Buildings + vegetation in one Overpass request (CORS-friendly, 3-endpoint failover). */
 async function fetchOverpass(lat: number, lng: number, radius: number): Promise<RawFeature[]> {
   const query =
     `[out:json][timeout:60];` +
@@ -139,11 +63,7 @@ async function fetchOverpass(lat: number, lng: number, radius: number): Promise<
     try {
       const resp = await fetch(endpoint, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'Accept':        'application/json',
-          'User-Agent':    'ou-regarder/1.0',
-        },
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded', Accept: 'application/json' },
         body: new URLSearchParams({ data: query }).toString(),
         signal: AbortSignal.timeout(60_000),
       })
@@ -166,37 +86,38 @@ async function fetchOverpass(lat: number, lng: number, radius: number): Promise<
 
 // ── Rendering ─────────────────────────────────────────────────────────────────
 
-function shadowOpacity(bHeight: number, analysis: VisibilityAnalysis): number {
-  if (analysis.type === 'directional') return 0.50
-  const eH = analysis.eventHeightMeters ?? 10
-  return Math.max(Math.min(bHeight / eH, 1) * 0.50, 0.08)
-}
-
 /**
- * Two-pass render: shadows first (below), building footprints on top (always visible).
- * Clears the layer before drawing so it's safe to call repeatedly.
+ * Single-pass scene render:
+ *  • one red MultiPolygon = the whole blocked zone (where the event is hidden)
+ *  • building / vegetation footprints on top, but only at street zoom and only
+ *    inside the current viewport (keeps thousands of polygons from rendering at once)
  */
-function renderObstacles(
-  obstacles: Obstacle[],
+function renderScene(
+  scene: Scene,
+  showBuildings: boolean,
+  bounds: LatLngBounds | null,
   layer: LayerGroup,
   L: typeof import('leaflet'),
-  analysis: VisibilityAnalysis,
 ) {
   layer.clearLayers()
-  for (const { shadow, height } of obstacles) {
-    if (shadow.length >= 3)
-      L.polygon(shadow, {
-        color: '#dc2626', weight: 0,
-        fillColor: '#dc2626', fillOpacity: shadowOpacity(height, analysis),
-      }).addTo(layer)
-  }
-  for (const { verts, isVeg } of obstacles)
-    L.polygon(verts, {
-      color:       isVeg ? '#15803d' : '#374151',
-      weight:      0.6,
-      fillColor:   isVeg ? '#16a34a' : '#6b7280',
-      fillOpacity: isVeg ? 0.22 : 0.38,
+
+  if (scene.zone.length)
+    L.polygon(scene.zone, {
+      color: '#dc2626', weight: 0,
+      fillColor: '#dc2626', fillOpacity: 0.32,
     }).addTo(layer)
+
+  if (showBuildings) {
+    for (const b of scene.buildings) {
+      if (bounds && !b.verts.some(([la, ln]) => bounds.contains([la, ln]))) continue
+      L.polygon(b.verts, {
+        color:       b.isVeg ? '#15803d' : '#374151',
+        weight:      0.5,
+        fillColor:   b.isVeg ? '#16a34a' : '#6b7280',
+        fillOpacity: b.isVeg ? 0.18 : 0.28,
+      }).addTo(layer)
+    }
+  }
 }
 
 // ── Component ─────────────────────────────────────────────────────────────────
@@ -240,10 +161,7 @@ export function EventMap({ event, selectedSpot, onSpotSelect }: Props) {
         shadowUrl:     'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
       })
 
-      map = L.map(mapRef.current!, {
-        center: [event.location.lat, event.location.lng],
-        zoom: 14,
-      })
+      map = L.map(mapRef.current!, { center: [event.location.lat, event.location.lng], zoom: 14 })
 
       L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
         attribution:
@@ -299,7 +217,7 @@ export function EventMap({ event, selectedSpot, onSpotSelect }: Props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  // ── Visibility analysis — runs once on mount ────────────────────────────────
+  // ── Visibility analysis — load once, render the unified blocked zone ─────────
   useEffect(() => {
     if (!event.visibilityAnalysis) return
     const analysis = event.visibilityAnalysis
@@ -324,27 +242,25 @@ export function EventMap({ event, selectedSpot, onSpotSelect }: Props) {
           : { lat: event.location.lat, lng: event.location.lng }
       const radius = analysis.radiusMeters ?? 2000
 
-      // ── Load once, keep everything in memory ────────────────────────────────
-      // No further API calls after this point. Pan/zoom just filters this dataset.
-      let allObstacles: Obstacle[] = []
-      let loadedSource: 'precomputed' | 'live' = 'live'
+      // Load once: precomputed JSON, else compute live from Overpass with the SAME
+      // shared core the precompute script uses. Everything then lives in memory.
+      let scene: Scene
+      let source: 'precomputed' | 'live'
       setAnalysisState('loading')
-
       try {
-        const precomp = await loadPrecomputed(event.slug)
-        if (precomp?.length) {
-          allObstacles = precomp
-          loadedSource = 'precomputed'
+        const pre = await loadPrecomputed(event.slug)
+        if (pre) {
+          scene = pre
+          source = 'precomputed'
         } else {
           const raw = await fetchOverpass(eventSource.lat, eventSource.lng, radius)
           if (raw.length === 0) throw new Error('Overpass returned 0 elements')
-          allObstacles = raw.map(({ verts, height, isVeg }) => ({
-            verts,
-            shadow: computeShadow(analysis, eventSource, verts, height),
-            isVeg,
-            height,
-          }))
-          loadedSource = 'live'
+          const { computeBlockedZone } = await import('@/lib/visibility-core')
+          scene = {
+            zone: computeBlockedZone(analysis, eventSource, raw),
+            buildings: raw.map(r => ({ verts: r.verts, isVeg: r.isVeg })),
+          }
+          source = 'live'
         }
       } catch (err) {
         console.error('[EventMap] Load failed:', err)
@@ -352,33 +268,23 @@ export function EventMap({ event, selectedSpot, onSpotSelect }: Props) {
         return
       }
 
-      // Return the subset visible inside the current viewport (+ padding).
-      // For zoom < 15 we render everything so overview shadows are always visible.
-      const getVisible = (): Obstacle[] => {
-        if (map.getZoom() < 15) return allObstacles
-        const bounds = map.getBounds().pad(0.3)
-        return allObstacles.filter(({ verts, shadow }) =>
-          verts.some(([lat, lng])   => bounds.contains([lat, lng])) ||
-          shadow.some(([lat, lng])  => bounds.contains([lat, lng]))
-        )
-      }
-
-      const refresh = () => {
-        const obs = getVisible()
-        renderObstacles(obs, layer, L, analysis)
-        setBuildingCount(obs.length)
-        setIsStreetLevel(map.getZoom() >= 15)
-        setDataSource(loadedSource)
+      // Draw = re-filter buildings to the current viewport. The zone is constant,
+      // so pan/zoom never triggers any network or geometry work — it's instant.
+      const draw = () => {
+        const showBuildings = map.getZoom() >= 15
+        const bounds = showBuildings ? map.getBounds().pad(0.3) : null
+        renderScene(scene, showBuildings, bounds, layer, L)
+        setBuildingCount(scene.buildings.length)
+        setIsStreetLevel(showBuildings)
+        setDataSource(source)
         setAnalysisState('done')
       }
 
-      refresh()
-
-      // Pan / zoom → instant re-filter from in-memory data, no API calls
+      draw()
       let debounce: ReturnType<typeof setTimeout> | null = null
       map.on('zoomend moveend', () => {
         if (debounce) clearTimeout(debounce)
-        debounce = setTimeout(refresh, 150)
+        debounce = setTimeout(draw, 120)
       })
     }
 
@@ -406,7 +312,7 @@ export function EventMap({ event, selectedSpot, onSpotSelect }: Props) {
           {analysisState === 'loading' && (
             <span className="inline-flex items-center gap-2 text-xs text-gray-500">
               <span className="w-3 h-3 border-2 border-gray-400 border-t-transparent rounded-full animate-spin" />
-              Chargement des bâtiments… (une seule fois, puis instantané)
+              Chargement de la zone de visibilité… (une seule fois, puis instantané)
             </span>
           )}
 
@@ -432,27 +338,27 @@ export function EventMap({ event, selectedSpot, onSpotSelect }: Props) {
               {visibilityOn && (
                 <div className="flex flex-wrap gap-3 text-xs text-gray-500">
                   <span className="flex items-center gap-1.5">
-                    <span className="w-3 h-2.5 rounded-sm bg-red-600 opacity-60 inline-block" />
-                    Ombre — intensité ∝ hauteur/événement
+                    <span className="w-3 h-2.5 rounded-sm bg-red-600 opacity-50 inline-block" />
+                    Zone rouge = vue bloquée
                   </span>
-                  <span className="flex items-center gap-1.5">
-                    <span className="w-3 h-2.5 rounded-sm bg-gray-500 opacity-80 inline-block" />
-                    Bâtiment
+                  <span className="flex items-center gap-1.5 text-gray-400">
+                    zones claires = vue dégagée
                   </span>
-                  <span className="flex items-center gap-1.5">
-                    <span className="w-3 h-2.5 rounded-sm bg-green-600 opacity-60 inline-block" />
-                    Végétation
-                  </span>
-                  <span className="text-gray-400 hidden sm:inline">· zones claires = vue dégagée</span>
-                  {!isStreetLevel && (
-                    <span className="text-gray-400 hidden sm:inline">· zoomez rue par rue pour le détail</span>
+                  {isStreetLevel && (
+                    <>
+                      <span className="flex items-center gap-1.5">
+                        <span className="w-3 h-2.5 rounded-sm bg-gray-500 opacity-80 inline-block" />
+                        Bâtiment
+                      </span>
+                      <span className="flex items-center gap-1.5">
+                        <span className="w-3 h-2.5 rounded-sm bg-green-600 opacity-60 inline-block" />
+                        Végétation
+                      </span>
+                    </>
                   )}
-                </div>
-              )}
-
-              {visibilityOn && (
-                <div className="w-full text-[10px] text-gray-400 -mt-1">
-                  Ombre légère = bâtiment plus court que l&apos;événement (vue possible par-dessus) · Ombre dense = obstruction totale
+                  {!isStreetLevel && (
+                    <span className="text-gray-400 hidden sm:inline">· zoomez pour voir les bâtiments</span>
+                  )}
                 </div>
               )}
 
@@ -460,14 +366,14 @@ export function EventMap({ event, selectedSpot, onSpotSelect }: Props) {
                 <div className="w-full mt-1 text-xs text-gray-500 flex items-center gap-1.5">
                   <span className="text-yellow-500">☀</span>
                   <span>
-                    Direction soleil : <strong>SSO (219°)</strong> à <strong>51° de hauteur</strong> — regardez vers le sud-sud-ouest. Zones rouges = bâtiment bloque le soleil.
+                    Direction soleil : <strong>SSO (219°)</strong> à <strong>51° de hauteur</strong> — regardez vers le sud-sud-ouest. Zones rouges = bâtiment devant le soleil.
                   </span>
                 </div>
               )}
 
               {isDebug && (
                 <span className="text-[10px] font-mono text-gray-400 ml-auto">
-                  [debug] {buildingCount} obstacles · {dataSource ?? '—'}{isStreetLevel ? ' · street' : ' · overview'}
+                  [debug] {buildingCount} bâtiments · {dataSource ?? '—'}{isStreetLevel ? ' · street' : ' · overview'}
                 </span>
               )}
             </>
