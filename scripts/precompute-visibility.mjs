@@ -1,74 +1,32 @@
 #!/usr/bin/env node
 /**
- * Precomputes visibility shadow polygons for every event with visibilityAnalysis.
+ * Precomputes the unified "blocked zone" (where the event cannot be seen) for
+ * every event with a visibilityAnalysis.
  *
- * Building data: Paris Open Data (volumesbatisparis, real LiDAR heights) with
- *   automatic Overpass fallback when Paris OD is unavailable from CI.
- * Vegetation: Overpass API only.
+ * Building data: Paris Open Data (volumesbatisparis, real LiDAR heights) with an
+ *   automatic Overpass fallback. Vegetation: Overpass.
+ * The blocked zone (union of all occlusion shadows) is computed by the shared
+ *   lib/visibility-core.mjs — the exact same code the browser uses live.
  *
  * Run:  node scripts/precompute-visibility.mjs
- * CI:   called in .github/workflows/deploy.yml before Next.js build
- * Out:  public/visibility/<slug>.json
+ * CI:   called in .github/workflows/deploy.yml before the Next.js build
+ * Out:  public/visibility/<slug>.json  →  { z: MultiPolygon, b: [{f,v}] }
  */
 
 import { writeFileSync, mkdirSync } from 'fs'
 import { join, dirname } from 'path'
 import { fileURLToPath } from 'url'
+import { computeBlockedZone } from '../lib/visibility-core.mjs'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const OUT_DIR   = join(__dirname, '..', 'public', 'visibility')
 
-// ── Geometry ──────────────────────────────────────────────────────────────────
-
 const r5 = ([lat, lng]) => [Math.round(lat * 1e5) / 1e5, Math.round(lng * 1e5) / 1e5]
-
-function convexHull(pts) {
-  if (pts.length < 3) return pts
-  const s = [...pts].sort((a, b) => a[0] !== b[0] ? a[0] - b[0] : a[1] - b[1])
-  const cross = (o, a, b) =>
-    (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0])
-  const lower = []
-  for (const p of s) {
-    while (lower.length >= 2 && cross(lower.at(-2), lower.at(-1), p) <= 0) lower.pop()
-    lower.push(p)
-  }
-  const upper = []
-  for (let i = s.length - 1; i >= 0; i--) {
-    const p = s[i]
-    while (upper.length >= 2 && cross(upper.at(-2), upper.at(-1), p) <= 0) upper.pop()
-    upper.push(p)
-  }
-  return [...lower.slice(0, -1), ...upper.slice(0, -1)].map(r5)
-}
-
-function radialShadow(eLat, eLng, eH, verts, bH) {
-  if (bH <= 0 || verts.length < 3) return []
-  const sf = Math.min(bH >= eH ? 25 : eH / (eH - bH), 25)
-  return convexHull([...verts, ...verts.map(([lat, lng]) => [eLat + sf * (lat - eLat), eLng + sf * (lng - eLng)])])
-}
-
-function routeShadow(routePoints, eH, verts, bH) {
-  if (bH <= 0 || verts.length < 3) return []
-  const all = [...verts]
-  for (const { lat, lng } of routePoints) all.push(...radialShadow(lat, lng, eH, verts, bH))
-  return convexHull(all)
-}
-
-function directionalShadow(sunAzDeg, sunElDeg, verts, bH, centerLat) {
-  if (bH <= 0 || verts.length < 3) return []
-  const azRad = ((sunAzDeg + 180) % 360) * Math.PI / 180
-  const len   = bH / Math.tan(sunElDeg * Math.PI / 180)
-  const dlat  = Math.cos(azRad) / 111320
-  const dlng  = Math.sin(azRad) / (111320 * Math.cos(centerLat * Math.PI / 180))
-  return convexHull([...verts, ...verts.map(([lat, lng]) => [lat + len * dlat, lng + len * dlng])])
-}
-
-// ── Height helpers ─────────────────────────────────────────────────────────────
 
 function extractHeight(tags = {}) {
   if (tags.height) { const h = parseFloat(tags.height); if (h > 0) return h }
   if (tags['building:levels']) { const f = parseInt(tags['building:levels']); if (f > 0) return Math.round(f * 3.5) }
-  return 17  // Haussmann baseline
+  return 17 // Haussmann baseline
 }
 
 // ── Paris Open Data — LiDAR building heights ──────────────────────────────────
@@ -82,7 +40,7 @@ async function fetchParisBuildings(lat, lng, radius) {
   process.stdout.write(`  Paris OD buildings (${radius} m)… `)
   const resp = await fetch(url, {
     headers: { 'Accept': 'application/json', 'User-Agent': 'ou-regarder-precompute/1.0' },
-    signal: AbortSignal.timeout(90_000),
+    signal: AbortSignal.timeout(120_000),
   })
   if (!resp.ok) throw new Error(`Paris OD HTTP ${resp.status}`)
   const data = await resp.json()
@@ -123,7 +81,7 @@ async function overpassPost(query, label) {
           'User-Agent':    'ou-regarder-precompute/1.0',
         },
         body: new URLSearchParams({ data: query }).toString(),
-        signal: AbortSignal.timeout(90_000),
+        signal: AbortSignal.timeout(120_000),
       })
       if (!resp.ok) { lastErr = new Error(`Overpass HTTP ${resp.status} (${endpoint})`); continue }
       const json = await resp.json()
@@ -142,16 +100,12 @@ async function fetchOverpassBuildings(lat, lng, radius) {
   const elements = await overpassPost(query, `buildings fallback (${radius} m)`)
   return elements
     .filter(el => el.geometry?.length >= 3)
-    .map(el => ({
-      verts:  el.geometry.map(g => r5([g.lat, g.lon])),
-      height: extractHeight(el.tags),
-      isVeg:  false,
-    }))
+    .map(el => ({ verts: el.geometry.map(g => r5([g.lat, g.lon])), height: extractHeight(el.tags), isVeg: false }))
 }
 
 async function fetchVegetation(lat, lng, radius) {
   const query =
-    `[out:json][timeout:40];` +
+    `[out:json][timeout:60];` +
     `(way["natural"="wood"](around:${radius},${lat},${lng});` +
     `way["landuse"="forest"](around:${radius},${lat},${lng});` +
     `way["leisure"="park"](around:${radius},${lat},${lng}););` +
@@ -159,11 +113,7 @@ async function fetchVegetation(lat, lng, radius) {
   const elements = await overpassPost(query, `vegetation (${radius} m)`)
   return elements
     .filter(el => el.geometry?.length >= 3)
-    .map(el => ({
-      verts:  el.geometry.map(g => r5([g.lat, g.lon])),
-      height: 12,
-      isVeg:  true,
-    }))
+    .map(el => ({ verts: el.geometry.map(g => r5([g.lat, g.lon])), height: 12, isVeg: true }))
 }
 
 // ── Event definitions ─────────────────────────────────────────────────────────
@@ -179,43 +129,35 @@ const ROUTE_CHAMPS = [
 
 /**
  * To add a new event:
- *   1. Add an entry here with slug, fetchCenter, radius, and compute function.
- *   2. Add visibilityAnalysis to data/events.json.
- *   3. Run this script — public/visibility/<slug>.json is generated.
- */
-/**
- * To add a new event:
- *   1. Add an entry here with slug, fetchCenter, radius, and compute function.
- *   2. Add visibilityAnalysis to data/events.json.
- *   3. Run this script — public/visibility/<slug>.json is generated.
+ *   1. Add an entry here (slug, fetchCenter, radius, analysis).
+ *   2. Add the matching visibilityAnalysis to data/events.json.
+ *   3. Run this script → public/visibility/<slug>.json is regenerated.
  *
- * Radius guidance:
- *   - Should cover the full area a user might zoom to on the event map.
- *   - Larger = more complete but larger JSON file (gzipped: ~150–200 bytes/building).
- *   - 3 000 m → ~15 000 buildings → ~2.5 MB raw → ~400 KB gzip (fine).
- *   - 5 000 m → ~40 000 buildings → ~8 MB raw → ~1.3 MB gzip (acceptable).
+ * `analysis` is passed verbatim to computeBlockedZone, so the precomputed zone
+ * is identical to what the browser would compute live.
  */
 const EVENTS = [
   {
     slug:        'feux-artifice-14-juillet',
     fetchCenter: { lat: 48.8584, lng: 2.2945 },
-    radius:      3500,  // covers 7e, 15e, 16e, 8e, Boulogne visible areas
-    compute:     (v, h) => radialShadow(48.8584, 2.2945, 320, v, h),
+    radius:      3500,
+    source:      { lat: 48.8584, lng: 2.2945 },
+    analysis:    { type: 'radial', eventHeightMeters: 320 },
   },
   {
     slug:        'defile-14-juillet',
-    // Parade is 2.1 km long; 1 500 m radius from midpoint covers the full route + margins
     fetchCenter: { lat: 48.8697, lng: 2.3081 },
-    radius:      1500,
-    compute:     (v, h) => routeShadow(ROUTE_CHAMPS, 5, v, h),
+    radius:      900,
+    source:      { lat: 48.8697, lng: 2.3081 },
+    analysis:    { type: 'route', eventHeightMeters: 5, routePoints: ROUTE_CHAMPS },
   },
   {
     slug:        'eclipse-solaire-2026',
     // 12 Aug 2026, 11:24 local → sun azimuth 219°, elevation 51°
-    // 8 m building → 6.5 m shadow (full sidewalk); 17 m → 13.8 m (full street width)
     fetchCenter: { lat: 48.8566, lng: 2.3522 },
-    radius:      3000,  // covers 1–6e + parts of 7e, 13e, 14e for street-level browsing
-    compute:     (v, h) => directionalShadow(219, 51, v, h, 48.8566),
+    radius:      2500,
+    source:      { lat: 48.8566, lng: 2.3522 },
+    analysis:    { type: 'directional', sunAzimuthDeg: 219, sunElevationDeg: 51 },
   },
 ]
 
@@ -228,38 +170,29 @@ async function main() {
     console.log(`\n▸ ${ev.slug}`)
     const { lat, lng } = ev.fetchCenter
 
-    // Buildings: Paris OD (real LiDAR heights) with Overpass fallback
     let buildings = []
     try {
       buildings = await fetchParisBuildings(lat, lng, ev.radius)
     } catch (e) {
       console.warn(`  Paris OD failed (${e.message}), trying Overpass buildings…`)
-      try {
-        buildings = await fetchOverpassBuildings(lat, lng, ev.radius)
-      } catch (e2) {
-        console.warn(`  Overpass buildings also failed: ${e2.message}`)
-      }
+      try { buildings = await fetchOverpassBuildings(lat, lng, ev.radius) }
+      catch (e2) { console.warn(`  Overpass buildings also failed: ${e2.message}`) }
     }
 
-    // Vegetation: Overpass only
     let vegetation = []
-    try {
-      vegetation = await fetchVegetation(lat, lng, ev.radius)
-    } catch (e) {
-      console.warn(`  Vegetation failed: ${e.message}`)
-    }
+    try { vegetation = await fetchVegetation(lat, lng, ev.radius) }
+    catch (e) { console.warn(`  Vegetation failed: ${e.message}`) }
 
-    const obstacles = []
-    for (const { verts, height } of buildings)
-      obstacles.push({ f: verts, s: ev.compute(verts, height), v: 0, h: Math.round(height) })
-    for (const { verts, height } of vegetation)
-      obstacles.push({ f: verts, s: ev.compute(verts, height), v: 1, h: Math.round(height) })
+    const features = [...buildings, ...vegetation]
+    process.stdout.write(`  Computing blocked zone from ${features.length} features… `)
+    const zone = computeBlockedZone(ev.analysis, ev.source, features)
+    console.log(`${zone.length} polygons`)
 
-    const json    = JSON.stringify(obstacles)
-    const outPath = join(OUT_DIR, `${ev.slug}.json`)
-    writeFileSync(outPath, json)
+    const b = features.map(f => ({ f: f.verts, v: f.isVeg ? 1 : 0 }))
+    const json = JSON.stringify({ z: zone, b })
+    writeFileSync(join(OUT_DIR, `${ev.slug}.json`), json)
     const kb = Math.round(Buffer.byteLength(json) / 1024)
-    console.log(`  ✓ ${obstacles.length} obstacles (${buildings.length} buildings, ${vegetation.length} vegetation) → ${ev.slug}.json (${kb} KB)`)
+    console.log(`  ✓ ${b.length} buildings, zone of ${zone.length} polygons → ${ev.slug}.json (${kb} KB)`)
   }
 
   console.log('\n✓ All done — commit public/visibility/*.json')
