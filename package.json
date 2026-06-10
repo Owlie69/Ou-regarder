@@ -6,13 +6,16 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "generate:eclipse": "python scripts/generate_eclipse_map.py --out public/data",
+    "generate:eclipse:fast": "python scripts/generate_eclipse_map.py --out public/data --res 10"
   },
   "dependencies": {
     "clsx": "^2.1.1",
     "date-fns": "^3.6.0",
     "leaflet": "^1.9.4",
     "lucide-react": "^0.468.0",
+    "maplibre-gl": "^5.24.0",
     "next": "14.2.35",
     "polygon-clipping": "^0.15.7",
     "react": "^18.3.1",

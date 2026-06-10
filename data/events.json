@@ -3,80 +3,92 @@
     "id": "eclipse-solaire-2026",
     "slug": "eclipse-solaire-2026",
     "name": "Éclipse solaire partielle 2026",
-    "shortDescription": "Une éclipse solaire partielle couvrant plus de 70% du soleil, visible depuis Paris le 12 août 2026.",
-    "longDescription": "Le 12 août 2026, Paris sera témoin d'un spectacle céleste rare : une éclipse solaire partielle d'une magnitude impressionnante. Le soleil sera couvert à plus de 70% au pic de l'éclipse, prévu vers 11h24. Les meilleurs spots sont les espaces ouverts avec une vue dégagée vers le sud-ouest. N'oubliez pas vos lunettes d'éclipse certifiées CE car regarder le soleil sans protection, même partiellement éclipsé, peut causer des lésions oculaires permanentes.",
+    "shortDescription": "Le 12 août 2026, une éclipse solaire partielle à 92 % sera visible depuis Paris au coucher du soleil. Le maximum a lieu à 20h17, le soleil étant à seulement 7,6° au-dessus de l'horizon vers l'ouest-nord-ouest (284°) — quasi aligné avec l'axe historique Louvre–Champs-Élysées–Grande Arche.",
+    "longDescription": "Le 12 août 2026, Paris sera le théâtre d'un spectacle céleste rare : une éclipse solaire partielle d'une magnitude impressionnante de 92 %. Le premier contact a lieu à 19h22 CEST, le maximum à 20h17 (soleil à 7,6° de hauteur, azimut 284° vers l'ONO) et l'éclipse se termine avec le coucher du soleil vers 21h09–21h11. La particularité parisienne : la direction du soleil au moment du maximum est presque exactement alignée avec l'axe historique de Paris (283–285°), ce qui signifie qu'un observateur sur les Champs-Élysées regardant vers La Défense verra le soleil partiellement éclipsé se coucher derrière la Grande Arche. N'oubliez pas vos lunettes d'éclipse certifiées CE — même partiellement éclipsé, regarder le soleil sans protection peut causer des lésions oculaires permanentes.",
     "category": "bientot",
     "published": true,
     "date": "2026-08-12",
-    "time": "11:24",
+    "time": "20:17",
     "recurrence": null,
     "imageUrl": "https://images.unsplash.com/photo-1532710093739-9470acff878f?w=800&q=80",
     "location": {
       "lat": 48.8566,
       "lng": 2.3522,
-      "name": "Paris (ciel, direction sud-ouest)"
+      "name": "Paris (ciel, direction ouest-nord-ouest — axe historique)"
     },
     "viewingSpots": [
       {
-        "id": "buttes-chaumont",
-        "name": "Parc des Buttes-Chaumont",
+        "id": "champs-elysees",
+        "name": "Champs-Élysées (vers la Grande Arche)",
         "rank": "best",
+        "lat": 48.8698,
+        "lng": 2.3078,
+        "direction": "Ouest-nord-ouest (azimut 283°)",
+        "distance": "3 km de La Défense",
+        "notes": "L'axe historique de Paris est quasi-parfaitement aligné avec l'azimut du soleil au moment du maximum (284°). Vue dégagée sur l'Arc de Triomphe et la Grande Arche. Le soleil s'y couchera partiellement éclipsé. Arrivez en avance pour un bon positionnement."
+      },
+      {
+        "id": "trocadero",
+        "name": "Trocadéro — Esplanade ouest",
+        "rank": "best",
+        "lat": 48.8638,
+        "lng": 2.2882,
+        "direction": "Ouest-nord-ouest (azimut 284°)",
+        "distance": "Vue directe sur la Tour Eiffel et la Seine",
+        "notes": "En se retournant face à l'ONO depuis le Trocadéro (côté opposé à la Tour Eiffel), l'horizon dégagé vers la Seine et les hauteurs de Saint-Cloud offre l'une des rares vues basses totalement libres de Paris. Excellent dégagement vers 7–8° d'altitude."
+      },
+      {
+        "id": "sacre-coeur-ouest",
+        "name": "Sacré-Cœur — versant ouest",
+        "rank": "good",
+        "lat": 48.8867,
+        "lng": 2.3409,
+        "direction": "Ouest-nord-ouest (azimut 283°)",
+        "distance": "130 m d'altitude, surplombe Paris",
+        "notes": "Le versant occidental de la Butte Montmartre offre une vue panoramique dégagée à très basse altitude. Depuis le square Louise-Michel ou les escaliers côté Montmartre, l'horizon ONO est libre à plus de 20 km. Point de vue idéal pour un soleil à 7° de hauteur."
+      },
+      {
+        "id": "buttes-chaumont",
+        "name": "Parc des Buttes-Chaumont — belvédère",
+        "rank": "good",
         "lat": 48.8797,
         "lng": 2.3827,
-        "direction": "Sud-ouest (azimut 220°)",
-        "distance": "4,5 km du centre",
-        "notes": "Vaste espace ouvert avec une vue panoramique dégagée sur tout le ciel. Le temple de la Sibylle offre un point de vue surélevé idéal. Arrivez tôt pour trouver une bonne place."
-      },
-      {
-        "id": "sacre-coeur",
-        "name": "Parvis du Sacré-Cœur (Montmartre)",
-        "rank": "best",
-        "lat": 48.8867,
-        "lng": 2.3431,
-        "direction": "Sud-ouest (azimut 220°)",
-        "distance": "5,5 km du centre",
-        "notes": "Le point le plus élevé de Paris offre une vue à 360° sans obstacles. Orientez-vous vers le sud-ouest. La foule sera importante : arrivez 1h avant le début."
-      },
-      {
-        "id": "parc-belleville",
-        "name": "Parc de Belleville",
-        "rank": "good",
-        "lat": 48.8688,
-        "lng": 2.3844,
-        "direction": "Sud-ouest (azimut 220°)",
-        "distance": "3 km du centre",
-        "notes": "Vue dégagée vers le sud et l'ouest depuis les terrasses du parc. Moins fréquenté que Montmartre, bon compromis entre vue et tranquillité."
-      },
-      {
-        "id": "esplanade-defense",
-        "name": "Esplanade de la Défense",
-        "rank": "acceptable",
-        "lat": 48.8924,
-        "lng": 2.2379,
-        "direction": "Sud (azimut 190°)",
-        "distance": "8 km à l'ouest du centre",
-        "notes": "Grand espace ouvert avec peu d'obstacles. La Grande Arche encadre le ciel vers l'est. Idéal si vous travaillez ou habitez à La Défense."
+        "direction": "Ouest-nord-ouest (azimut 281°)",
+        "distance": "Sommet à ~79 m, vue 360°",
+        "notes": "Le sommet des Buttes-Chaumont est l'un des rares points élevés de l'est parisien avec une vue dégagée sur l'horizon occidental. Bon compromis entre altitude et accessibilité. Arrivez 45 min avant pour s'installer avant l'éclipse."
       }
     ],
     "sunEvent": true,
-    "eventDateTime": "2026-08-12T11:24:00",
+    "eventDateTime": "2026-08-12T20:17:00+02:00",
     "viewingTips": [
-      "Portez obligatoirement des lunettes d'éclipse certifiées CE (norme ISO 12312-2)",
-      "Arrivez au moins 45 minutes avant le début pour trouver une bonne place",
-      "L'éclipse débute vers 10h05, atteint son maximum à 11h24, et se termine vers 12h45",
-      "Apportez de l'eau et de la crème solaire car il fera chaud en août",
-      "Évitez les endroits avec des arbres hauts qui pourraient bloquer la vue vers le sud-ouest",
-      "Un appareil photo avec filtre solaire permettra de capturer l'événement"
+      "⚠️ Lunettes d'éclipse homologuées CE indispensables — même à 92 %, regarder le soleil nud peut causer une cécité permanente.",
+      "Arrivez au moins 30 min avant 19h22 (premier contact) pour trouver un bon spot.",
+      "Le soleil sera très bas (7,6°) : cherchez un horizon dégagé vers l'ONO, sans bâtiment ni arbre devant vous.",
+      "L'éclipse se terminera avec le coucher du soleil (~21h09) — les dernières minutes risquent d'être partiellement nuageuses ou découpées par l'horizon.",
+      "Emportez un trépied ou un support : à cette hauteur, la mise au point est délicate et la lumière faiblit vite.",
+      "L'axe Louvre–Arc de Triomphe–Grande Arche est aligné à 283° : depuis les Champs-Élysées, le soleil se couchera quasi dans l'axe."
     ],
     "seoTitle": "Où regarder l'éclipse solaire 2026 depuis Paris : meilleurs spots",
     "seoDescription": "Trouvez les meilleurs endroits pour observer l'éclipse solaire partielle du 12 août 2026 à Paris. Spots recommandés avec vue dégagée, horaires et conseils pratiques.",
-    "tags": ["éclipse", "astronomie", "soleil", "ciel", "événement rare"],
+    "tags": [
+      "éclipse",
+      "astronomie",
+      "soleil",
+      "ciel",
+      "événement rare",
+      "coucher de soleil"
+    ],
     "visibilityAnalysis": {
       "type": "directional",
-      "sunAzimuthDeg": 219,
-      "sunElevationDeg": 51,
-      "radiusMeters": 1500,
-      "minShadowHeightMeters": 0
+      "sunAzimuthDeg": 284,
+      "sunElevationDeg": 7.6,
+      "radiusMeters": 3000,
+      "minShadowHeightMeters": 3,
+      "pregeneratedAssets": {
+        "zonesPath": "data/eclipse-2026-zones.geojson",
+        "heatmapPath": "data/eclipse-2026-visibility.png",
+        "boundsPath": "data/eclipse-2026-visibility.bounds.json"
+      }
     }
   },
   {
@@ -93,7 +105,7 @@
     "imageUrl": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80",
     "location": {
       "lat": 48.8738,
-      "lng": 2.2950,
+      "lng": 2.295,
       "name": "Avenue des Champs-Élysées, Paris"
     },
     "viewingSpots": [
@@ -102,7 +114,7 @@
         "name": "Rond-Point de l'Arc de Triomphe",
         "rank": "best",
         "lat": 48.8738,
-        "lng": 2.2950,
+        "lng": 2.295,
         "direction": "Face à l'avenue (est)",
         "distance": "Point de départ du défilé",
         "notes": "Le meilleur endroit pour voir le départ du défilé et l'arrivée des avions. Accès restreint : arrivez avant 7h. Les tribunes officielles sont ici. Vue sur la totalité de l'avenue."
@@ -111,8 +123,8 @@
         "id": "champs-elysees-milieu",
         "name": "Milieu des Champs-Élysées (côté pair)",
         "rank": "best",
-        "lat": 48.8710,
-        "lng": 2.3020,
+        "lat": 48.871,
+        "lng": 2.302,
         "direction": "Vers l'Arc de Triomphe (ouest) puis la Concorde (est)",
         "distance": "800 m de l'Arc de Triomphe",
         "notes": "Position idéale pour voir défiler les troupes à pied et les blindés. Les côtés impairs sont légèrement plus dégagés. Arrivez avant 8h pour un bon emplacement sur les barrières."
@@ -150,23 +162,62 @@
     ],
     "seoTitle": "Meilleur endroit pour regarder le défilé du 14 juillet à Paris",
     "seoDescription": "Où se placer pour voir le défilé militaire du 14 juillet sur les Champs-Élysées ? Meilleurs spots, conseils d'arrivée et accès transport.",
-    "tags": ["14 juillet", "défilé", "Champs-Élysées", "Fête nationale", "militaire"],
+    "tags": [
+      "14 juillet",
+      "défilé",
+      "Champs-Élysées",
+      "Fête nationale",
+      "militaire"
+    ],
     "visibilityAnalysis": {
       "type": "route",
       "eventHeightMeters": 5,
       "radiusMeters": 900,
       "routePoints": [
-        { "lat": 48.8737, "lng": 2.2950 },
-        { "lat": 48.8729, "lng": 2.2976 },
-        { "lat": 48.8721, "lng": 2.3002 },
-        { "lat": 48.8713, "lng": 2.3028 },
-        { "lat": 48.8705, "lng": 2.3055 },
-        { "lat": 48.8697, "lng": 2.3081 },
-        { "lat": 48.8689, "lng": 2.3107 },
-        { "lat": 48.8681, "lng": 2.3133 },
-        { "lat": 48.8673, "lng": 2.3159 },
-        { "lat": 48.8665, "lng": 2.3185 },
-        { "lat": 48.8656, "lng": 2.3212 }
+        {
+          "lat": 48.8737,
+          "lng": 2.295
+        },
+        {
+          "lat": 48.8729,
+          "lng": 2.2976
+        },
+        {
+          "lat": 48.8721,
+          "lng": 2.3002
+        },
+        {
+          "lat": 48.8713,
+          "lng": 2.3028
+        },
+        {
+          "lat": 48.8705,
+          "lng": 2.3055
+        },
+        {
+          "lat": 48.8697,
+          "lng": 2.3081
+        },
+        {
+          "lat": 48.8689,
+          "lng": 2.3107
+        },
+        {
+          "lat": 48.8681,
+          "lng": 2.3133
+        },
+        {
+          "lat": 48.8673,
+          "lng": 2.3159
+        },
+        {
+          "lat": 48.8665,
+          "lng": 2.3185
+        },
+        {
+          "lat": 48.8656,
+          "lng": 2.3212
+        }
       ]
     }
   },
@@ -241,7 +292,13 @@
     ],
     "seoTitle": "Où voir les feux d'artifice du 14 juillet 2026 à Paris : meilleurs endroits",
     "seoDescription": "Meilleurs spots pour regarder le feu d'artifice du 13 juillet 2026 depuis la Tour Eiffel. Trocadéro, Champ de Mars, bords de Seine : guide complet.",
-    "tags": ["14 juillet", "feux d'artifice", "Tour Eiffel", "Fête nationale", "Trocadéro"],
+    "tags": [
+      "14 juillet",
+      "feux d'artifice",
+      "Tour Eiffel",
+      "Fête nationale",
+      "Trocadéro"
+    ],
     "visibilityAnalysis": {
       "type": "radial",
       "eventHeightMeters": 320,
@@ -319,7 +376,14 @@
     ],
     "seoTitle": "Où regarder France vs Sénégal Coupe du Monde 2026 à Paris",
     "seoDescription": "Où voir le match France-Sénégal de la Coupe du Monde 2026 à Paris ? Fan zones, écrans géants et bars qui retransmettent le match du 16 juin 2026.",
-    "tags": ["football", "Coupe du Monde 2026", "équipe de France", "fan zone", "écran géant", "Sénégal"]
+    "tags": [
+      "football",
+      "Coupe du Monde 2026",
+      "équipe de France",
+      "fan zone",
+      "écran géant",
+      "Sénégal"
+    ]
   },
   {
     "id": "france-irak-coupe-monde-2026",
@@ -381,7 +445,14 @@
     ],
     "seoTitle": "Où regarder France vs Irak Coupe du Monde 2026 à Paris",
     "seoDescription": "Où voir le match France-Irak de la Coupe du Monde 2026 à Paris le 22 juin à 23h ? Fan zones et écrans géants ouverts tard à Paris.",
-    "tags": ["football", "Coupe du Monde 2026", "équipe de France", "fan zone", "écran géant", "Irak"]
+    "tags": [
+      "football",
+      "Coupe du Monde 2026",
+      "équipe de France",
+      "fan zone",
+      "écran géant",
+      "Irak"
+    ]
   },
   {
     "id": "france-norvege-coupe-monde-2026",
@@ -443,7 +514,14 @@
     ],
     "seoTitle": "Où regarder France vs Norvège Coupe du Monde 2026 à Paris",
     "seoDescription": "Où voir le match France-Norvège de la Coupe du Monde 2026 à Paris le 26 juin ? Fan zones, écrans géants et bars sportifs à Paris.",
-    "tags": ["football", "Coupe du Monde 2026", "équipe de France", "fan zone", "écran géant", "Norvège"]
+    "tags": [
+      "football",
+      "Coupe du Monde 2026",
+      "équipe de France",
+      "fan zone",
+      "écran géant",
+      "Norvège"
+    ]
   },
   {
     "id": "lever-soleil-montmartre",
@@ -478,7 +556,7 @@
         "name": "Terrasse derrière la Place du Tertre",
         "rank": "good",
         "lat": 48.8866,
-        "lng": 2.3410,
+        "lng": 2.341,
         "direction": "Est",
         "distance": "100 m du Sacré-Cœur",
         "notes": "Vue légèrement différente avec le dôme du Sacré-Cœur en premier plan. Moins connue des touristes, souvent plus calme. Accessible depuis la rue Norvins."
@@ -506,7 +584,14 @@
     ],
     "seoTitle": "Lever de soleil depuis Montmartre Paris : horaires et meilleurs spots",
     "seoDescription": "Comment voir le lever de soleil depuis Montmartre ? Meilleurs endroits sur la butte, horaires selon la saison et conseils pratiques pour un lever réussi.",
-    "tags": ["lever de soleil", "Montmartre", "Sacré-Cœur", "panorama", "aube", "atemporel"]
+    "tags": [
+      "lever de soleil",
+      "Montmartre",
+      "Sacré-Cœur",
+      "panorama",
+      "aube",
+      "atemporel"
+    ]
   },
   {
     "id": "tour-eiffel-illuminations",
@@ -540,7 +625,7 @@
         "id": "pont-iena",
         "name": "Pont d'Iéna",
         "rank": "best",
-        "lat": 48.8590,
+        "lat": 48.859,
         "lng": 2.2891,
         "direction": "Nord (Tour Eiffel) ou Sud (Trocadéro)",
         "distance": "Au pied de la Tour Eiffel",
@@ -561,7 +646,7 @@
         "name": "Quai Branly (rive gauche)",
         "rank": "good",
         "lat": 48.8606,
-        "lng": 2.3020,
+        "lng": 2.302,
         "direction": "Ouest (vers la Tour Eiffel)",
         "distance": "400 m",
         "notes": "Vue latérale sur la Tour Eiffel depuis la Seine. Les arbres du quai peuvent partiellement obstruer en été. Très agréable pour une promenade nocturne."
@@ -579,7 +664,14 @@
     ],
     "seoTitle": "Où voir les illuminations de la Tour Eiffel : meilleurs spots nocturnes",
     "seoDescription": "Découvrez les meilleurs endroits pour regarder les illuminations et le scintillement de la Tour Eiffel. Trocadéro, Champ de Mars, Seine : guide complet.",
-    "tags": ["Tour Eiffel", "illuminations", "scintillement", "nuit", "Paris", "atemporel"]
+    "tags": [
+      "Tour Eiffel",
+      "illuminations",
+      "scintillement",
+      "nuit",
+      "Paris",
+      "atemporel"
+    ]
   },
   {
     "id": "marathon-paris-2025",
@@ -595,7 +687,7 @@
     "imageUrl": "https://images.unsplash.com/photo-1452573992436-6d508f200b30?w=800&q=80",
     "location": {
       "lat": 48.8738,
-      "lng": 2.2950,
+      "lng": 2.295,
       "name": "Avenue des Champs-Élysées (départ), Paris"
     },
     "viewingSpots": [
@@ -604,7 +696,7 @@
         "name": "Champs-Élysées (départ/arrivée)",
         "rank": "best",
         "lat": 48.8698,
-        "lng": 2.3070,
+        "lng": 2.307,
         "direction": "Le long de l'avenue",
         "distance": "Point de départ et d'arrivée",
         "notes": "L'ambiance au départ est électrique. Les spectateurs encouragent les coureurs depuis les trottoirs de l'avenue."
@@ -629,6 +721,12 @@
     ],
     "seoTitle": "Marathon de Paris 2025 : où regarder les coureurs passer",
     "seoDescription": "Revivez le Marathon de Paris 2025. Découvrez les meilleurs endroits pour encourager les coureurs le long du parcours parisien.",
-    "tags": ["marathon", "sport", "course", "Champs-Élysées", "Paris"]
+    "tags": [
+      "marathon",
+      "sport",
+      "course",
+      "Champs-Élysées",
+      "Paris"
+    ]
   }
 ]

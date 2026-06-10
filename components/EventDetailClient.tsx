@@ -19,6 +19,18 @@ const EventMap = dynamic(
   }
 )
 
+const EclipseMap = dynamic(
+  () => import('@/components/EclipseMap').then((m) => m.EclipseMap),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="w-full h-[520px] rounded-xl bg-gray-100 animate-pulse flex items-center justify-center text-gray-400 text-sm">
+        Chargement de la carte…
+      </div>
+    ),
+  }
+)
+
 const rankConfig = {
   best: { label: 'Meilleur spot', badgeClass: 'bg-green-100 text-green-800 border-green-200', dot: 'bg-green-500' },
   good: { label: 'Bon spot', badgeClass: 'bg-blue-100 text-blue-800 border-blue-200', dot: 'bg-blue-500' },
@@ -45,11 +57,19 @@ export function EventDetailClient({ event }: Props) {
           <MapPin size={18} className="text-[#c8a96e]" />
           Carte des spots
         </h2>
-        <EventMap
-          event={event}
-          selectedSpot={selectedSpot}
-          onSpotSelect={setSelectedSpot}
-        />
+        {event.visibilityAnalysis?.pregeneratedAssets ? (
+          <EclipseMap
+            event={event}
+            selectedSpot={selectedSpot}
+            onSpotSelect={setSelectedSpot}
+          />
+        ) : (
+          <EventMap
+            event={event}
+            selectedSpot={selectedSpot}
+            onSpotSelect={setSelectedSpot}
+          />
+        )}
 
         {/* Legend */}
         <div className="flex flex-wrap gap-3 mt-3 text-xs text-gray-600">
